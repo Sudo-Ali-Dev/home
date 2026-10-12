@@ -2,7 +2,7 @@
 
 A Vite + React app rendering ThreeUI's `KageLandingPage`, rebranded as **Home**.
 
-Live: https://sudo-ali-dev.github.io/home/
+Live: https://sudoali.dev/home/
 
 ```sh
 npm install
