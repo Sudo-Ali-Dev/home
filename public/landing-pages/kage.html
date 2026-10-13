@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Home — Where stillness reveals the unseen</title>
-<meta name="description" content="A five-chapter night walk through a Kyoto mountain temple. Charred cypress, lantern light and a vermilion moon, rendered live in WebGL.">
+<title>Home — House of Marketing &amp; Execution</title>
+<meta name="description" content="Home is a house of marketing and execution: brand, personal branding, campaigns, creative, production, digital growth, research and entertainment marketing under one roof.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305070a'/%3E%3Ccircle cx='16' cy='17' r='8' fill='%23e0231c'/%3E%3Crect x='4' y='8' width='24' height='2.6' fill='%23dfe7e0'/%3E%3Crect x='7' y='13' width='18' height='2' fill='%23dfe7e0'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="secret-pathways-assets/fonts.css">
 <style>
@@ -413,6 +413,157 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   transform:scaleX(0); transform-origin:left; transition:transform .7s var(--ease-out); }
 .les:hover .bar{ transform:scaleX(1); }
 
+/* — the team · banners
+     Four banners hung from one rod, the role read down the cloth. They sway
+     a little, out of step, like the sakura and maple cut-outs; the one you
+     call warms through to vermilion and says what that lead does. */
+.tc-banners{ position:relative; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(12px,2.2vw,36px); padding-top:30px; }
+.tc-banners::before{ content:''; position:absolute; left:-2%; right:-2%; top:10px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg,transparent,rgba(223,231,224,.42) 5%,rgba(223,231,224,.42) 95%,transparent); }
+.tc-ban{ position:relative; display:block; width:100%; height:clamp(420px,62vh,620px); text-align:left; cursor:pointer;
+  transform-origin:50% -20px; animation:tc-sway var(--sd,7s) var(--ease-io) infinite alternate; animation-delay:var(--sdl,0s); }
+.tc-ban::before{ content:''; position:absolute; left:22%; right:22%; top:-20px; height:20px;
+  border-left:1px solid rgba(223,231,224,.30); border-right:1px solid rgba(223,231,224,.30); }
+.tc-ban-cloth{ position:absolute; inset:0; clip-path:polygon(0 0,100% 0,100% 100%,50% 93%,0 100%);
+  background:linear-gradient(90deg,rgba(255,255,255,.035),transparent 34%,rgba(0,0,0,.28)), linear-gradient(#0e1317,#07090c);
+  transition:background .7s var(--ease); }
+.tc-ban-cloth::after{ content:''; position:absolute; inset:6px 6px 0; border:1px solid rgba(223,231,224,.08); border-bottom:0; }
+.tc-ban:hover .tc-ban-cloth, .tc-ban:focus-visible .tc-ban-cloth{
+  background:linear-gradient(90deg,rgba(255,255,255,.04),transparent 34%,rgba(0,0,0,.24)), linear-gradient(#1a0f0e,#0b0708); }
+.tc-ban-top{ position:absolute; left:clamp(16px,1.6vw,24px); right:clamp(16px,1.6vw,24px); top:22px; display:flex; justify-content:space-between;
+  font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
+.tc-ban-top b{ font-weight:500; color:var(--vermilion); }
+.tc-ban-v{ position:absolute; right:clamp(16px,1.8vw,28px); top:62px; max-height:calc(100% - 170px); writing-mode:vertical-rl;
+  font-size:clamp(30px,3vw,48px); line-height:1.12; letter-spacing:.08em; text-transform:uppercase; color:var(--bone); }
+.tc-ban-seal{ position:absolute; left:clamp(16px,1.8vw,26px); bottom:15%; width:26px; height:26px; border-radius:50%;
+  background:var(--vermilion); box-shadow:0 0 0 5px rgba(224,35,28,.12), 0 0 18px rgba(224,35,28,.6); transition:box-shadow .6s; }
+.tc-ban:hover .tc-ban-seal, .tc-ban:focus-visible .tc-ban-seal{ box-shadow:0 0 0 7px rgba(224,35,28,.18), 0 0 30px rgba(224,35,28,.9); }
+.tc-ban-d{ position:absolute; left:clamp(16px,1.8vw,26px); right:44%; bottom:25%; margin:0; font-size:13px; line-height:1.6; color:#aab4ad;
+  opacity:0; transform:translate3d(0,10px,0); transition:opacity .6s var(--ease), transform .8s var(--ease-out); }
+.tc-ban:hover .tc-ban-d, .tc-ban:focus-visible .tc-ban-d{ opacity:1; transform:none; }
+@keyframes tc-sway{ from{ transform:rotate(-.55deg); } to{ transform:rotate(.55deg); } }
+.tc-ban:focus-visible{ outline:1px solid var(--vermilion); outline-offset:4px; }
+/* with the cloth running, the buttons stay for focus and clicks and the
+   fabric is drawn underneath them, type and all */
+.tc-cloth{ position:absolute; z-index:0; display:block; pointer-events:none; }
+.tc-banners.is-cloth .tc-ban{ z-index:1; animation:none; }
+.tc-banners.is-cloth .tc-ban > span{ opacity:0 !important; }
+@media (max-width:1080px){
+  .tc-banners{ grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:56px; }
+  /* two rows: each banner carries its own length of rod */
+  .tc-banners::before{ display:none; }
+  .tc-ban::after{ content:''; position:absolute; left:-8px; right:-8px; top:-22px; height:2px; border-radius:2px;
+    background:rgba(223,231,224,.42); }
+}
+@media (max-width:820px){
+  .tc-ban{ height:360px; }
+  .tc-ban-v{ font-size:26px; }
+  .tc-ban-d{ right:16px; bottom:24%; }
+}
+@media (prefers-reduced-motion:reduce){
+  .tc-ban{ animation:none; }
+}
+
+/* ------------------------------------------------------ detail sheets
+   Think, Make and Grow, and each of the eight services, open as a sheet
+   drawn in from the right over a dimmed sanctuary. It sits under the grain,
+   so it is the same paper as the page, and over the nav and the rail. */
+html.pop-open{ overflow:hidden; scrollbar-gutter:stable; }
+.pop{ position:fixed; inset:0; z-index:57; }
+.pop[hidden]{ display:none; }
+.pop-scrim{ position:absolute; inset:0; background:rgba(3,5,8,.62);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); opacity:0; transition:opacity .6s var(--ease); }
+.pop.open .pop-scrim{ opacity:1; }
+.pop-panel{
+  position:absolute; top:0; right:0; bottom:0; width:min(1080px,94vw); display:flex; flex-direction:column;
+  background:rgba(6,9,12,.97); border-left:1px solid var(--line); outline:0;
+  transform:translate3d(104%,0,0); transition:transform .8s var(--ease-out);
+}
+.pop.open .pop-panel{ transform:none; }
+.pop-bar{ flex:none; display:flex; align-items:center; gap:16px; height:var(--nav-h); padding:0 var(--pad);
+  border-bottom:1px solid var(--line-soft); }
+.pop-kick{ font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+.pop-kick b{ color:var(--vermilion); font-weight:500; }
+.pop-x{ flex:none; width:42px; height:42px; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%;
+  transition:background .4s var(--ease), border-color .4s, transform .6s var(--ease-out); }
+.pop-x svg{ width:14px; height:14px; }
+.pop-x:hover{ background:var(--bone); border-color:var(--bone); transform:rotate(90deg); }
+.pop-x:hover path{ stroke:#05070a; }
+.pop-scroll{ flex:1 1 auto; overflow-y:auto; overscroll-behavior:contain;
+  padding:clamp(28px,5vh,56px) var(--pad) clamp(44px,8vh,96px);
+  scrollbar-width:thin; scrollbar-color:rgba(223,231,224,.18) transparent; }
+.pop-scroll > *{ opacity:0; transform:translate3d(0,22px,0);
+  transition:opacity .8s var(--ease-out) var(--d,0ms), transform 1s var(--ease-out) var(--d,0ms); }
+.pop.in .pop-scroll > *{ opacity:1; transform:none; }
+.pop .eyebrow .dot{ display:inline-block; width:5px; height:5px; margin-right:6px; vertical-align:middle; border-radius:50%;
+  background:var(--vermilion); box-shadow:0 0 10px var(--vermilion); }
+.pop-art{ position:relative; aspect-ratio:21/9; overflow:hidden; margin-bottom:clamp(28px,5vh,48px);
+  outline:1px solid var(--line-soft); outline-offset:-1px; }
+.pop-art::before{ content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(3,6,9,.10) 30%,rgba(3,6,9,.80)), var(--img) center / cover no-repeat;
+  transform:scale(1.08); transition:transform 1.8s var(--ease-out); }
+.pop.in .pop-art::before{ transform:none; }
+.pop-art > span{ position:absolute; left:20px; right:20px; bottom:16px; display:flex; justify-content:space-between;
+  font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(223,231,224,.72); }
+.pop-hero{ position:relative; padding-bottom:clamp(28px,4.4vh,48px); border-bottom:1px solid var(--line-soft); }
+.pop-mark{ position:absolute; right:-.04em; top:-.12em; z-index:-1; pointer-events:none;
+  font-size:clamp(150px,22vw,320px); font-weight:500; line-height:.8; letter-spacing:-.04em;
+  color:rgba(223,231,224,.04); -webkit-text-stroke:1px rgba(223,231,224,.10); }
+.pop-title{ margin-top:18px; max-width:16ch; font-size:clamp(34px,4.6vw,68px); line-height:1.0; }
+.pop-title--xl{ font-size:clamp(64px,10vw,150px); line-height:.9; letter-spacing:-.03em; }
+.pop-sub{ margin:14px 0 0; font-size:11px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--bone-dim); }
+.pop-lead{ max-width:58ch; margin:22px 0 0; }
+.pop-h{ margin:0 0 18px; font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
+.pop-grid{ display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); gap:clamp(28px,5vw,80px);
+  padding:clamp(30px,5vh,56px) 0; border-bottom:1px solid var(--line-soft); }
+.pop-list{ list-style:none; margin:0; padding:0; border-top:1px solid var(--line-soft); }
+.pop-list li{ display:grid; grid-template-columns:44px minmax(0,1fr); gap:14px; padding:16px 0;
+  border-bottom:1px solid var(--line-soft); font-size:clamp(15px,1.2vw,18px); line-height:1.45; color:#c9d2cb; }
+.pop .k{ font-size:11px; letter-spacing:.16em; color:var(--muted); font-variant-numeric:tabular-nums; padding-top:4px; }
+.pop-list b{ display:block; font-weight:400; color:var(--bone); }
+.pop-list .d{ display:block; margin-top:4px; font-size:13px; line-height:1.6; color:#909b95; }
+.pop-tags{ list-style:none; margin:0 0 30px; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
+.pop-tags li{ padding:9px 14px; border:1px solid var(--line); border-radius:100px; font-size:12px; letter-spacing:.03em; color:var(--bone-dim); }
+.pop-out{ margin:0; }
+.pop-sec{ padding-top:clamp(30px,5vh,56px); }
+.pop-steps{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); }
+.pop-step{ display:flex; flex-direction:column; gap:12px; min-height:180px; padding:24px; background:rgba(5,7,10,.92); }
+.pop-step .k{ color:var(--vermilion); padding:0; }
+.pop-step h5{ margin:0; font-size:clamp(18px,1.6vw,24px); font-weight:400; }
+.pop-step p{ margin:0; font-size:13px; line-height:1.6; color:#909b95; }
+.pop-links{ border-top:1px solid var(--line-soft); }
+.pop-link{ position:relative; display:grid; grid-template-columns:44px minmax(0,1fr) auto; align-items:center; gap:14px;
+  width:100%; padding:20px 0; text-align:left; border-bottom:1px solid var(--line-soft);
+  font-size:clamp(17px,1.6vw,24px); font-weight:300; transition:padding .5s var(--ease-out); }
+.pop-link .k{ padding:0; transition:color .4s; }
+.pop-link svg{ transition:transform .5s var(--ease-out); }
+.pop-link:hover, .pop-link:focus-visible{ padding-left:clamp(8px,1.2vw,18px); }
+.pop-link:hover .k, .pop-link:focus-visible .k{ color:var(--vermilion); }
+.pop-link:hover svg{ transform:translate3d(2px,-2px,0); }
+.pop-link .bar{ position:absolute; left:0; bottom:-1px; height:1px; width:100%; background:var(--vermilion);
+  transform:scaleX(0); transform-origin:left; transition:transform .7s var(--ease-out); }
+.pop-link:hover .bar, .pop-link:focus-visible .bar{ transform:scaleX(1); }
+.pop-foot{ display:flex; align-items:center; justify-content:space-between; gap:20px 32px; flex-wrap:wrap;
+  margin-top:clamp(34px,6vh,64px); }
+.pop-foot .cta{ margin-top:0; }
+.pop-pn{ display:flex; gap:clamp(18px,3vw,40px); }
+.pop-pn button{ display:flex; flex-direction:column; gap:6px; text-align:left; }
+.pop-pn button:last-child{ text-align:right; }
+.pop-pn small{ font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
+.pop-pn span{ font-size:14px; color:var(--bone-dim); transition:color .3s; }
+.pop-pn button:hover span{ color:var(--bone); }
+.pop :focus-visible{ outline:1px solid var(--vermilion); outline-offset:4px; }
+@media (max-width:820px){
+  .pop-panel{ width:100vw; border-left:0; }
+  .pop-grid{ grid-template-columns:1fr; }
+  .pop-steps{ grid-template-columns:1fr; }
+  .pop-step{ min-height:0; }
+  .pop-art{ aspect-ratio:16/10; }
+}
+@media (prefers-reduced-motion:reduce){
+  .pop-scrim, .pop-panel, .pop-scroll > *, .pop-art::before{ transition:none !important; }
+}
+
 /* — chapter IV: eternity */
 .fin{ min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
 .fin .eyebrow{ margin-bottom:26px; }
@@ -814,7 +965,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   body[data-layout-story="b"] .gate-copy{ grid-column:auto; }
   body[data-layout-story="b"] .gate-grid h2{ max-width:16ch; }
   body[data-layout-curriculum="b"] .les:nth-child(n){ grid-column:span 3; }
-  body[data-layout-curriculum="b"] .les:last-child{ grid-column:span 6; }
+  body[data-layout-curriculum="b"] .les:last-child:nth-child(odd){ grid-column:span 6; }
 }
 @media (max-width:820px){
   /* the split collapses and the copy takes the page back */
@@ -900,10 +1051,10 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
         <path d="M6 12h32M9.5 17h25M22 8v28" stroke="#dfe7e0" stroke-width="1.2"/>
       </svg>
     </div>
-    <div class="pre-jp jp">影の道</div>
+    <div class="pre-jp">HOME</div>
     <div class="pre-bar"><i id="pre-fill"></i></div>
     <div class="pre-meta">
-      <span>Raising the mountain temple</span><b><span id="pre-pct">0</span>%</b>
+      <span>Opening the house</span><b><span id="pre-pct">0</span>%</b>
     </div>
   </div>
 </div>
@@ -916,13 +1067,14 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
       <path d="M5 13h34M9 18.4h26M22 8.5v27" stroke="#dfe7e0" stroke-width="1.5"/>
       <path d="M14 35.5h16" stroke="#dfe7e0" stroke-width="1.2" stroke-opacity=".6"/>
     </svg>
-    <span class="brand-tx"><b>HOME</b><i>HIDDEN REALMS OF KYOTO</i></span>
+    <span class="brand-tx"><b>HOME</b><i>MARKETING &amp; EXECUTION</i></span>
   </a>
   <nav class="nav-links" id="navlinks">
-    <a class="nav-link" href="#gate" data-cursor><span>Temples</span><span class="alt">伽藍</span></a>
-    <a class="nav-link" href="#pathways" data-cursor><span>Gardens</span><span class="alt">庭園</span></a>
-    <a class="nav-link" href="#lessons" data-cursor><span>Rituals</span><span class="alt">神事</span></a>
-    <a class="nav-link" href="#eternity" data-cursor><span>Afterlight</span><span class="alt">残光</span></a>
+    <a class="nav-link" href="#gate" data-cursor><span>About</span><span class="alt">About</span></a>
+    <a class="nav-link" href="#pathways" data-cursor><span>Approach</span><span class="alt">Approach</span></a>
+    <a class="nav-link" href="#lessons" data-cursor><span>Services</span><span class="alt">Services</span></a>
+    <a class="nav-link" href="#team" data-cursor><span>Team</span><span class="alt">Team</span></a>
+    <a class="nav-link" href="#eternity" data-cursor><span>Contact</span><span class="alt">Contact</span></a>
   </nav>
   <button class="nav-burger" aria-label="Menu" data-cursor><i></i><i></i></button>
 </header>
@@ -932,14 +1084,11 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <!-- ============================================================ hero -->
 <section class="hero" id="hero" data-cam="0">
   <div class="hero-top">
-    <div class="eyebrow" data-rv="fade"><span class="dot"></span> Chapter 00 — The Hidden Gate</div>
+    <div class="eyebrow" data-rv="fade"><span class="dot"></span> 00 — House of Marketing &amp; Execution</div>
     <h1 class="display h-hero">
-      <span class="mask-line"><span>Where stillness</span></span>
-      <span class="mask-line"><span>reveals the</span></span>
-      <span class="mask-line"><span>unseen.</span></span>
+      <span class="mask-line"><span>Where strategy</span></span>
+      <span class="mask-line"><span>becomes execution.</span></span>
     </h1>
-    <p class="hero-sub body" data-rv="up">Enter Kyoto through its quiet thresholds, where ritual,
-      craft, and memory shape the path.</p>
   </div>
 
   <div class="hero-spacer"></div>
@@ -948,29 +1097,26 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     <div class="hero-cue" data-rv="fade"><span>Scroll to enter</span><span class="track"><i></i></span></div>
     <div class="chapters" id="chips">
       <div class="chip" data-chip="0" data-rv="up" data-cursor><span class="num">01</span>
-        <span class="tx"><b>Thresholds</b><p>Discover the hidden gates that open on to deeper paths.</p></span></div>
+        <span class="tx"><b>Strategy</b><p>Brand, personal and marketing strategy that sets the direction.</p></span></div>
       <div class="chip" data-chip="1" data-rv="up" data-cursor><span class="num">02</span>
-        <span class="tx"><b>Still Gardens</b><p>Witness the courts where silence gently unfolds.</p></span></div>
+        <span class="tx"><b>Creative</b><p>Ideas and content built to be remembered.</p></span></div>
       <div class="chip" data-chip="2" data-rv="up" data-cursor><span class="num">03</span>
-        <span class="tx"><b>Sacred Craft</b><p>Embrace the hands and heritage that shape devotion.</p></span></div>
+        <span class="tx"><b>Execution</b><p>Production that ships on time and on brief.</p></span></div>
       <div class="chip" data-chip="3" data-rv="up" data-cursor><span class="num">04</span>
-        <span class="tx"><b>Night Rituals</b><p>Explore the rites that awaken when the day is done.</p></span></div>
+        <span class="tx"><b>Growth</b><p>Digital, data and technology that compound results.</p></span></div>
     </div>
   </div>
 
-  <a class="peek" href="#pathways" data-view="3" data-rv="fade" data-cursor aria-label="Preview: Sanmon, before the bell">
+  <a class="peek" href="#pathways" data-view="3" data-rv="fade" data-cursor aria-label="Preview: inside the house">
     <!-- data-frame, or the live view is blitted over the whole anchor and
          runs on down behind the caption instead of stopping at the frame -->
     <span class="peek-fr" data-frame></span>
     <span class="peek-play"><svg viewBox="0 0 22 22" fill="none"><path d="M8 5.6 16.4 11 8 16.4z" fill="#dfe7e0"/></svg></span>
-    <span class="peek-cap"><b class="jp">山門</b><i>Sanmon — before the bell</i></span>
+    <span class="peek-cap"><b class="jp">Work</b><i>Inside the house</i></span>
   </a>
 
   <div class="word-fb" aria-hidden="true">HOME</div>
 
-  <div class="hero-side" data-rv="up">
-    <span class="v jp">影の道</span>
-  </div>
 </section>
 
 <!-- ============================================================ chapter I -->
@@ -988,29 +1134,28 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
-    <span class="k"><b>01</b> — The Sanmon</span><span class="rule"></span><span class="k jp">山門</span>
+    <span class="k"><b>01</b> — The House</span><span class="rule"></span><span class="k">One roof</span>
   </div>
   <div class="gate-grid">
-    <h2 class="display h-sec" data-rv="up">Charred cypress, worn stone, one gate left open.</h2>
+    <h2 class="display h-sec" data-rv="up">Strategy and execution, under one roof.</h2>
     <div class="gate-copy">
-      <p class="lead" data-rv="up">Home begins where the city stops: a mountain gate of cedar burned black,
-        standing in its own weather. The soot is not decoration. It is how a board is taught to survive a
-        hundred rainy seasons, and the first thing this place asks you to understand.</p>
-      <p class="body" data-rv="up">Climb the worn steps and the worship hall lifts out of the mist, its paper
-        screens lit from inside like a lantern the size of a house. Above the eaves a vermilion moon holds
-        its place, patient, half hidden. Nothing here is in a hurry. Neither, for the next ninety minutes,
-        are you.</p>
+      <p class="lead" data-rv="up">Home is a house of marketing and execution. Most brands get their strategy from one
+        team and their production from another, and the idea gets lost in the handover. We built Home so
+        the idea never leaves the building.</p>
+      <p class="body" data-rv="up">Strategists, creatives, producers and technologists work in the same room, on
+        the same brief, from the first question to the final cut. Research shapes the strategy, the
+        strategy shapes the content, and the content ships with the numbers to show for it.</p>
       <a class="arrowlink" href="#pathways" data-rv="fade" data-cursor>
-        <span>Cross the threshold</span>
+        <span>See what we do</span>
         <span class="ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
       </a>
     </div>
   </div>
   <div class="gate-stats" data-rv="up">
-    <div><b>05</b><span>Chapters</span></div>
-    <div><b>92</b><span>Minutes</span></div>
-    <div><b>1611</b><span>Hall raised</span></div>
-    <div><b>∞</b><span>Stillness</span></div>
+    <div><b>08</b><span>Disciplines</span></div>
+    <div><b>01</b><span>Roof</span></div>
+    <div><b>00</b><span>Handovers</span></div>
+    <div><b>∞</b><span>Ambition</span></div>
   </div>
 </section>
 
@@ -1032,32 +1177,32 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
-    <span class="k"><b>02</b> — Still Gardens</span><span class="rule"></span><span class="k jp">庭園</span>
+    <span class="k"><b>02</b> — How We Work</span><span class="rule"></span><span class="k">Think · Make · Grow</span>
   </div>
   <div class="cards" id="cards">
     <article class="card" data-rv="up" data-view="0" data-cursor>
       <div class="card-fr" data-frame>
                 <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
         <i class="glow" style="--gx:80.2%; --gy:23.9%; --gr:22%; --gt:6.1s; --gt2:9.7s; --gc1:rgba(255,142,108,.50); --gc2:rgba(212,56,38,.24)"></i>
-        <div class="card-lab"><b>Approach</b><span class="jp">参道</span></div>
+        <div class="card-lab"><b>Think</b><span class="jp">Strategy</span></div>
       </div>
-      <div class="card-meta"><span>The long climb</span><span>01 / 03</span></div>
+      <div class="card-meta"><span>Research, insight, strategy</span><span>01 / 03</span></div>
     </article>
     <article class="card" data-rv="up" data-view="1" data-cursor>
       <div class="card-fr" data-frame>
                 <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
         <i class="glow glow--flame" style="--gx:70.5%; --gy:47.2%; --gr:14%; --gt:3.7s; --gt2:5.3s; --gc1:rgba(255,198,124,.62); --gc2:rgba(226,118,40,.30)"></i>
-        <div class="card-lab"><b>Lanterns</b><span class="jp">灯籠</span></div>
+        <div class="card-lab"><b>Make</b><span class="jp">Content</span></div>
       </div>
-      <div class="card-meta"><span>Lantern court</span><span>02 / 03</span></div>
+      <div class="card-meta"><span>Creative, content, production</span><span>02 / 03</span></div>
     </article>
     <article class="card" data-rv="up" data-view="2" data-cursor>
       <div class="card-fr" data-frame>
                 <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
         <i class="glow" style="--gx:48.0%; --gy:16.8%; --gr:20%; --gt:7.3s; --gt2:11.2s; --gc1:rgba(255,138,104,.52); --gc2:rgba(208,54,36,.24)"></i>
-        <div class="card-lab"><b>Moonwater</b><span class="jp">月影</span></div>
+        <div class="card-lab"><b>Grow</b><span class="jp">Growth</span></div>
       </div>
-      <div class="card-meta"><span>The wet court</span><span>03 / 03</span></div>
+      <div class="card-meta"><span>Digital, data, technology</span><span>03 / 03</span></div>
     </article>
   </div>
 </section>
@@ -1077,45 +1222,107 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
-    <span class="k"><b>03</b> — Sacred Craft</span><span class="rule"></span><span class="k jp">手業</span>
+    <span class="k"><b>03</b> — Services</span><span class="rule"></span><span class="k">Eight disciplines</span>
   </div>
   <div class="cur-head">
-    <h2 class="display h-sec" data-rv="up">Five chapters. Ninety minutes. One quiet mind.</h2>
-    <p class="body-lg" data-rv="up">Each chapter is a walk, not a lecture. You arrive at the gate, climb the
-      steps, sit with the lantern, and leave with one thing worth keeping.</p>
+    <h2 class="display h-sec" data-rv="up">Eight disciplines. One house. One standard.</h2>
+    <p class="body-lg" data-rv="up">Every engagement draws on the disciplines it needs and nothing more. Start
+      with one, or bring us the whole brief.</p>
   </div>
   <div class="cur" id="cur">
     <div class="les" data-les="0" data-cursor>
       <span class="k">01</span>
-      <h3>The Hidden Gate<em class="jp">山門</em></h3>
-      <p>Why a gate is a sentence, and what you agree to when you walk under one.</p>
-      <span class="t">14 min</span><i class="bar"></i>
+      <h3>Brand Strategy &amp; Consulting</h3>
+      <p>Positioning, architecture and identity that give a brand a reason to exist.</p>
+      <span class="t">Strategy</span><i class="bar"></i>
     </div>
     <div class="les" data-les="1" data-cursor>
       <span class="k">02</span>
-      <h3>Borrowed Scenery<em class="jp">借景</em></h3>
-      <p>Shakkei: composing with a mountain you will never own.</p>
-      <span class="t">18 min</span><i class="bar"></i>
+      <h3>Personal Branding</h3>
+      <p>Founders, leaders and creators, built into names people trust and follow.</p>
+      <span class="t">Brand</span><i class="bar"></i>
     </div>
     <div class="les" data-les="2" data-cursor>
       <span class="k">03</span>
-      <h3>Charred Cypress<em class="jp">焼杉</em></h3>
-      <p>Yakisugi: burning a board black so the weather will let it live.</p>
-      <span class="t">21 min</span><i class="bar"></i>
+      <h3>Marketing Strategy &amp; Campaigns</h3>
+      <p>Go-to-market plans and campaigns that turn attention into demand.</p>
+      <span class="t">Marketing</span><i class="bar"></i>
     </div>
     <div class="les" data-les="3" data-cursor>
       <span class="k">04</span>
-      <h3>Lantern Light<em class="jp">灯籠</em></h3>
-      <p>How a single ember decides the scale of everything around it.</p>
-      <span class="t">17 min</span><i class="bar"></i>
+      <h3>Creative Strategy &amp; Content</h3>
+      <p>Ideas, platforms and content systems built to be remembered.</p>
+      <span class="t">Creative</span><i class="bar"></i>
     </div>
     <div class="les" data-les="4" data-cursor>
       <span class="k">05</span>
-      <h3>The Vermilion Moon<em class="jp">朱月</em></h3>
-      <p>Why the moon burns red over the valley, and what the garden does with it.</p>
-      <span class="t">22 min</span><i class="bar"></i>
+      <h3>Production &amp; Content Execution</h3>
+      <p>Shoots, edits and rollouts, produced in-house and delivered on brief.</p>
+      <span class="t">Production</span><i class="bar"></i>
+    </div>
+    <div class="les" data-les="5" data-cursor>
+      <span class="k">06</span>
+      <h3>Digital Growth &amp; Technology</h3>
+      <p>Performance, web, data and automation that compound every result.</p>
+      <span class="t">Growth</span><i class="bar"></i>
+    </div>
+    <div class="les" data-les="6" data-cursor>
+      <span class="k">07</span>
+      <h3>Research &amp; Intelligence</h3>
+      <p>Market, audience and competitor insight that sharpens every decision.</p>
+      <span class="t">Insight</span><i class="bar"></i>
+    </div>
+    <div class="les" data-les="7" data-cursor>
+      <span class="k">08</span>
+      <h3>Artist &amp; Entertainment Marketing</h3>
+      <p>Releases, tours and talent campaigns for music, film and culture.</p>
+      <span class="t">Entertainment</span><i class="bar"></i>
     </div>
   </div>
+</section>
+
+<!-- ============================================================ team -->
+<!-- No data-cam: the team is not a stop on the camera path, so the scene keeps
+     gliding from the services plates to the closing section while it is read. -->
+<section class="sec" id="team">
+  <div class="sec-head" data-rv="fade">
+    <span class="k"><b>04</b> — The Team</span><span class="rule"></span><span class="k">Four leads</span>
+  </div>
+  <div class="cur-head">
+    <h2 class="display h-sec" data-rv="up">The people under the roof.</h2>
+    <p class="body-lg" data-rv="up">Strategists, creatives, producers and technologists in one team. The
+      people who plan your work are the people who make it.</p>
+  </div>
+  <div class="tc-banners">
+      <button class="tc-ban" type="button" data-lead="0" data-cursor style="--sd:7.2s; --sdl:-1.1s">
+        <span class="tc-ban-cloth"></span>
+        <span class="tc-ban-top"><b>01</b><span>Think</span></span>
+        <span class="tc-ban-v">Strategy Lead</span>
+        <span class="tc-ban-d">Owns positioning, research and the plan every campaign is built on.</span>
+        <span class="tc-ban-seal"></span>
+      </button>
+      <button class="tc-ban" type="button" data-lead="1" data-cursor style="--sd:8.1s; --sdl:-3.4s">
+        <span class="tc-ban-cloth"></span>
+        <span class="tc-ban-top"><b>02</b><span>Make</span></span>
+        <span class="tc-ban-v">Creative Director</span>
+        <span class="tc-ban-d">Turns the strategy into ideas, platforms and content worth remembering.</span>
+        <span class="tc-ban-seal"></span>
+      </button>
+      <button class="tc-ban" type="button" data-lead="2" data-cursor style="--sd:6.6s; --sdl:-2.2s">
+        <span class="tc-ban-cloth"></span>
+        <span class="tc-ban-top"><b>03</b><span>Make</span></span>
+        <span class="tc-ban-v">Head of Production</span>
+        <span class="tc-ban-d">Runs the shoots, edits and rollouts, and delivers them on time and on brief.</span>
+        <span class="tc-ban-seal"></span>
+      </button>
+      <button class="tc-ban" type="button" data-lead="3" data-cursor style="--sd:7.7s; --sdl:-5.0s">
+        <span class="tc-ban-cloth"></span>
+        <span class="tc-ban-top"><b>04</b><span>Grow</span></span>
+        <span class="tc-ban-v">Growth Lead</span>
+        <span class="tc-ban-d">Builds the performance, data and technology that make every result compound.</span>
+        <span class="tc-ban-seal"></span>
+      </button>
+    </div>
 </section>
 
 <!-- ============================================================ chapter IV -->
@@ -1135,12 +1342,12 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
       <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
     </span>
   </div>
-  <div class="eyebrow" data-rv="fade">Chapter 04 — Afterlight</div>
-  <h2 class="display" data-rv="up">Afterlight</h2>
-  <p class="body-lg" data-rv="up">The gate does not close behind you. Take the walk whenever the noise
-    gets loud — it is always the same path, and never the same light.</p>
+  <div class="eyebrow" data-rv="fade">05 — Start a Project</div>
+  <h2 class="display" data-rv="up">Come Home</h2>
+  <p class="body-lg" data-rv="up">Bring us the brief, the idea or just the problem. We will take it from
+    strategy to the finished work.</p>
   <a class="cta" href="#top" data-rv="fade" data-cursor>
-    <i></i><span>Begin the walk</span>
+    <i></i><span>Start a project</span>
     <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg>
   </a>
 </section>
@@ -1165,31 +1372,32 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
         <circle cx="22" cy="25" r="8.6" fill="#e0231c" fill-opacity=".9"/>
         <path d="M5 13h34M9 18.4h26M22 8.5v27" stroke="#dfe7e0" stroke-width="1.5"/>
       </svg>
-      <p>A five-chapter night walk through a Kyoto mountain temple. Three illustrated garden field notes
-        sit inside a live Three.js sanctuary.</p>
+      <p>Home is a house of marketing and execution: strategy, creative, production and growth
+        under one roof.</p>
     </div>
-    <div><h4>Chapters</h4><ul>
-      <li><a href="#gate" data-cursor>The Sanmon</a></li>
-      <li><a href="#pathways" data-cursor>Still Gardens</a></li>
-      <li><a href="#lessons" data-cursor>Sacred Craft</a></li>
-      <li><a href="#eternity" data-cursor>Afterlight</a></li>
+    <div><h4>House</h4><ul>
+      <li><a href="#gate" data-cursor>About</a></li>
+      <li><a href="#pathways" data-cursor>How we work</a></li>
+      <li><a href="#lessons" data-cursor>Services</a></li>
+      <li><a href="#team" data-cursor>Team</a></li>
+      <li><a href="#eternity" data-cursor>Start a project</a></li>
     </ul></div>
-    <div><h4>Practice</h4><ul>
-      <li><a href="#lessons" data-cursor>Borrowed scenery</a></li>
-      <li><a href="#lessons" data-cursor>Lantern light</a></li>
-      <li><a href="#lessons" data-cursor>Charred cypress</a></li>
-      <li><a href="#lessons" data-cursor>Raked gravel</a></li>
+    <div><h4>Services</h4><ul>
+      <li><a href="#lessons" data-cursor>Brand strategy</a></li>
+      <li><a href="#lessons" data-cursor>Personal branding</a></li>
+      <li><a href="#lessons" data-cursor>Campaigns</a></li>
+      <li><a href="#lessons" data-cursor>Content production</a></li>
     </ul></div>
-    <div><h4>Elsewhere</h4><ul>
-      <li><a href="#top" data-cursor>Journal</a></li>
-      <li><a href="#top" data-cursor>Field notes</a></li>
-      <li><a href="#top" data-cursor>Colophon</a></li>
+    <div><h4>Connect</h4><ul>
+      <li><a href="#top" data-cursor>Work</a></li>
+      <li><a href="#top" data-cursor>Careers</a></li>
+      <li><a href="#top" data-cursor>Contact</a></li>
     </ul></div>
   </div>
   <div class="foot-base">
-    <span>© 2026 Home — Kage no Michi</span>
-    <span class="jp">静けさは一つの技である</span>
-    <span>WebGL · Onest · Kyoto</span>
+    <span>© 2026 Home</span>
+    <span>House of Marketing &amp; Execution</span>
+    <span>Strategy · Creative · Execution</span>
   </div>
 </footer>
 
@@ -1201,6 +1409,20 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <div id="fg-sky" aria-hidden="true"></div>
 
 <div class="rail" id="rail"></div>
+
+<!-- detail sheets: filled from the data in the script at the foot of the page -->
+<div class="pop" id="pop" role="dialog" aria-modal="true" aria-labelledby="pop-title" hidden>
+  <div class="pop-scrim" data-pop-close></div>
+  <div class="pop-panel">
+    <div class="pop-bar">
+      <span class="pop-kick" id="pop-kick"></span><span class="rule"></span>
+      <button class="pop-x" type="button" data-pop-close data-cursor aria-label="Close">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5 11.5 11.5M11.5 2.5 2.5 11.5" stroke="#dfe7e0" stroke-width="1.3"/></svg>
+      </button>
+    </div>
+    <div class="pop-scroll" id="pop-scroll"></div>
+  </div>
+</div>
 
 <script src="secret-pathways-assets/three.min.js"></script>
 <script>
@@ -4329,7 +4551,7 @@ function wireHeroExit() {
 function wireNav() {
   let last = 0;
   const rail = $('#rail');
-  const names = ['The Hidden Gate', 'The Sanmon', 'Still Gardens', 'Sacred Craft', 'Afterlight', 'Colophon'];
+  const names = ['Home', 'The House', 'How We Work', 'Services', 'Start a Project', 'Footer'];
   SECS.forEach((s, i) => {
     const b = document.createElement('button');
     b.innerHTML = '<i></i>'; b.title = names[i] || '';
@@ -4815,6 +5037,519 @@ function start() {
 
 if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(boot, 0);
 else addEventListener('DOMContentLoaded', boot);
+})();
+</script>
+<script>
+/* =====================================================================
+   Detail sheets and the team banners. Kept apart from the scene above: it
+   only reads the page's markup, and nothing in the engine depends on it.
+   ===================================================================== */
+(function () {
+'use strict';
+
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const IMG = 'secret-pathways-assets/generated/';
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => [].slice.call((r || document).querySelectorAll(s));
+const pad = n => (n < 10 ? '0' : '') + n;
+const ARROW = '<svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg>';
+
+/* ------------------------------------------------------------ content */
+const PILLARS = [
+  { name: 'Think', sub: 'Research, insight, strategy', img: 'kage-approach.webp',
+    lead: 'Every piece of work starts with knowing what is true. We study the market, the audience and the competition, then turn what we find into a position and a plan the whole team can build on.',
+    what: [
+      ['Research', 'Market, audience and competitor studies that replace assumptions with evidence.'],
+      ['Positioning', 'A clear answer to why you, why now, and why it matters.'],
+      ['Planning', 'Channel, budget and timeline decisions, made before anything is made.'],
+      ['Measurement', 'The few numbers that show whether it is working, agreed up front.']
+    ],
+    out: 'A strategy the team actually uses, a position everyone can repeat, and a plan with owners and dates.',
+    steps: [
+      ['Listen', 'Workshops and interviews with your team and your customers.'],
+      ['Study', 'Research and audits across the market, the audience and the competition.'],
+      ['Decide', 'Positioning, priorities and a plan, signed off together.']
+    ],
+    services: [6, 0, 2] },
+  { name: 'Make', sub: 'Creative, content, production', img: 'kage-lantern-court.webp',
+    lead: 'This is where the strategy becomes something people can see, hear and share. Ideas, identities, content and campaigns, made in-house by the same team that wrote the plan.',
+    what: [
+      ['Ideas', 'Campaign and content platforms with room to run for months, not days.'],
+      ['Identity', 'Visual and verbal systems for brands and the people behind them.'],
+      ['Production', 'Photo, video, design and copy, shot, edited and finished in-house.'],
+      ['Rollout', 'Every asset cut for its channel and shipped on schedule.']
+    ],
+    out: 'Work that looks like the idea you signed off, delivered in every format you need, on the day you need it.',
+    steps: [
+      ['Concept', 'Ideas tested against the strategy before a single frame is shot.'],
+      ['Produce', 'Shoots, edits, design and copy, all under one roof.'],
+      ['Ship', 'Assets cut, checked and delivered to every channel on time.']
+    ],
+    services: [3, 4, 1] },
+  { name: 'Grow', sub: 'Digital, data, technology', img: 'kage-moonwater.webp',
+    lead: 'Good work deserves an audience. We put it in front of the right people, measure what happens and keep improving it, with the technology to make the results compound.',
+    what: [
+      ['Performance', 'Paid social, search and creator media, planned and optimised every week.'],
+      ['Platforms', 'Websites, landing pages and funnels built to convert.'],
+      ['Data', 'Tracking, dashboards and reporting you can actually read.'],
+      ['Automation', 'CRM, email and workflow tools that keep momentum without adding headcount.']
+    ],
+    out: 'A growth system you can see working: live numbers, a clear read on what drives them, and a plan for the next step.',
+    steps: [
+      ['Launch', 'Campaigns and platforms go live with tracking in place from day one.'],
+      ['Measure', 'Weekly reads on what is working and what is not.'],
+      ['Improve', 'Budget and creative move toward what performs.']
+    ],
+    services: [5, 7] }
+];
+
+const LEADS = [
+  { role: 'Strategy Lead', pillar: 0, grp: 'Brand &amp; Marketing Strategy',
+    lead: 'Every engagement starts at this desk. The Strategy Lead runs the research, finds the position worth owning and writes the plan the rest of the house builds on.',
+    leads: ['Positioning and brand platforms', 'Research and audience insight', 'Go-to-market and campaign plans'], services: [0, 2, 6] },
+  { role: 'Creative Director', pillar: 1, grp: 'Creative &amp; Content',
+    lead: 'The Creative Director turns the plan into an idea people remember, then sets the look, the words and the formats that carry it on every channel.',
+    leads: ['Creative platforms and big ideas', 'Art direction and copy', 'Content systems and formats'], services: [3, 1] },
+  { role: 'Head of Production', pillar: 1, grp: 'Production &amp; Execution',
+    lead: 'The Head of Production makes the work real: crews, shoots, edits and delivery, planned so the finished piece looks like the idea that was signed off.',
+    leads: ['Shoots, edits and post-production', 'Schedules, budgets and crews', 'Rollout to every channel'], services: [4] },
+  { role: 'Growth Lead', pillar: 2, grp: 'Digital Growth &amp; Technology',
+    lead: 'The Growth Lead puts the work in front of the right people, reads the numbers every week and builds the systems that make results compound.',
+    leads: ['Performance media', 'Websites, data and dashboards', 'CRM and automation'], services: [5, 7] }
+];
+
+const SERVICES = [
+  { title: 'Brand Strategy &amp; Consulting', pillar: 0,
+    lead: 'A brand is the reason someone chooses you before they compare prices. We define what yours stands for, how it speaks and where it is going, then stay on as advisers while it grows.',
+    inc: ['Brand audits and discovery workshops', 'Positioning and value proposition', 'Brand architecture and naming', 'Messaging and tone of voice', 'Ongoing brand consulting'],
+    get: ['Brand strategy', 'Positioning statement', 'Messaging framework', 'Brand guidelines'],
+    fit: 'New brands, rebrands, and businesses that have outgrown their story.' },
+  { title: 'Personal Branding', pillar: 1,
+    lead: 'People follow people. We help founders, executives and creators turn what they know into a public presence that builds trust, opens doors and supports the business behind them.',
+    inc: ['Personal positioning and story', 'Content pillars and a publishing plan', 'Profile and visual identity', 'Ghostwriting and content production', 'Speaking, press and partnership preparation'],
+    get: ['Personal brand playbook', 'Content calendar', 'Profile refresh', 'Monthly content'],
+    fit: 'Founders, leaders, creators and experts building a name in their field.' },
+  { title: 'Marketing Strategy &amp; Campaigns', pillar: 0,
+    lead: 'A strategy that stops at a document is not finished. We plan the go-to-market, build the campaigns and run them, so the thinking and the doing stay connected from launch to report.',
+    inc: ['Go-to-market and launch planning', 'Campaign concepts and channel plans', 'Media planning and budgeting', 'Campaign management and optimisation', 'Reporting and post-campaign review'],
+    get: ['Marketing plan', 'Campaign concept', 'Media plan', 'Performance reports'],
+    fit: 'Launches, seasonal pushes, and brands ready to grow on purpose.' },
+  { title: 'Creative Strategy &amp; Content', pillar: 1,
+    lead: 'Attention is earned in the first second. We find the idea worth saying, then build a content system around it that keeps the brand recognisable on every channel.',
+    inc: ['Creative platforms and big ideas', 'Content strategy and pillars', 'Social-first formats and series', 'Copywriting and art direction', 'Content calendars and guidelines'],
+    get: ['Creative platform', 'Content strategy', 'Format library', 'Content calendar'],
+    fit: 'Brands that post a lot but are remembered for little.' },
+  { title: 'Production &amp; Content Execution', pillar: 1,
+    lead: 'Ideas only count once they are made. Our production team plans, shoots, edits and delivers in-house, so the finished work looks like the idea you signed off.',
+    inc: ['Pre-production, casting and locations', 'Photo and video shoots', 'Editing, motion and post-production', 'Design and copy for every format', 'Asset delivery and channel rollout'],
+    get: ['Campaign films', 'Photography', 'Social cut-downs', 'Ready-to-post assets'],
+    fit: 'Campaigns, launches and always-on content that has to ship on time.' },
+  { title: 'Digital Growth &amp; Technology', pillar: 2,
+    lead: 'Growth is a system, not a lucky post. We combine performance media, websites and data to find what works, then use technology to scale it without adding busywork.',
+    inc: ['Paid social and search campaigns', 'Websites, landing pages and funnels', 'Analytics, tracking and dashboards', 'CRM, email and automation', 'Conversion rate optimisation'],
+    get: ['Growth plan', 'Ad campaigns', 'Website or funnel', 'Live dashboard'],
+    fit: 'Brands with a product people love and a growth curve that should be steeper.' },
+  { title: 'Research &amp; Intelligence', pillar: 0,
+    lead: 'Good decisions come from knowing what is true. We study your market, audience and competitors, and turn the findings into insight the whole team can act on.',
+    inc: ['Market and category research', 'Audience interviews and surveys', 'Competitor analysis and social listening', 'Trend and cultural analysis', 'Insight workshops'],
+    get: ['Research report', 'Audience personas', 'Competitor map', 'Insight deck'],
+    fit: 'Teams about to make a big decision who want to make it with evidence.' },
+  { title: 'Artist &amp; Entertainment Marketing', pillar: 2,
+    lead: 'Culture moves fast and fans notice everything. We build campaigns for artists, releases, films and events that feel true to the work and travel as far as it deserves.',
+    inc: ['Release and rollout strategy', 'Artist branding and visual worlds', 'Fan community and social growth', 'Tour, event and premiere campaigns', 'Partnerships and brand collaborations'],
+    get: ['Rollout plan', 'Visual identity', 'Social campaign', 'Partnership deck'],
+    fit: 'Artists, labels, studios, promoters and entertainment brands.' }
+];
+
+/* ------------------------------------------------------------ templates */
+const link = (kind, i, k, label) =>
+  '<button class="pop-link" type="button" data-open="' + kind + ':' + i + '" data-cursor>' +
+  '<span class="k">' + k + '</span><span>' + label + '</span>' + ARROW + '<i class="bar"></i></button>';
+const cta = '<a class="cta" href="#eternity" data-pop-cta data-cursor><i></i><span>Start a project</span>' + ARROW + '</a>';
+function prevNext(kind, i, list) {
+  const n = list.length, a = (i + n - 1) % n, b = (i + 1) % n;
+  return '<div class="pop-pn">' +
+    '<button type="button" data-open="' + kind + ':' + a + '" data-cursor><small>Previous</small><span>' + list[a] + '</span></button>' +
+    '<button type="button" data-open="' + kind + ':' + b + '" data-cursor><small>Next</small><span>' + list[b] + '</span></button></div>';
+}
+
+function pillarHTML(i) {
+  const p = PILLARS[i];
+  return '' +
+    '<div class="pop-art" style="--img:url(\'' + IMG + p.img + '\')"><span><span>' + pad(i + 1) + ' / 03</span><span>' + p.sub + '</span></span></div>' +
+    '<header class="pop-hero">' +
+      '<div class="eyebrow"><span class="dot"></span>' + pad(i + 1) + ' — How we work</div>' +
+      '<h2 class="display pop-title pop-title--xl" id="pop-title">' + p.name + '</h2>' +
+      '<p class="pop-sub">' + p.sub + '</p>' +
+      '<p class="body-lg pop-lead">' + p.lead + '</p>' +
+    '</header>' +
+    '<div class="pop-grid">' +
+      '<section><h4 class="pop-h">What happens here</h4><ol class="pop-list">' +
+        p.what.map((w, n) => '<li><span class="k">' + pad(n + 1) + '</span><span><b>' + w[0] + '</b><span class="d">' + w[1] + '</span></span></li>').join('') +
+      '</ol></section>' +
+      '<section><h4 class="pop-h">You leave with</h4><p class="body-lg pop-out">' + p.out + '</p></section>' +
+    '</div>' +
+    '<section class="pop-sec"><h4 class="pop-h">How it runs</h4><div class="pop-steps">' +
+      p.steps.map((st, n) => '<div class="pop-step"><span class="k">' + pad(n + 1) + '</span><h5>' + st[0] + '</h5><p>' + st[1] + '</p></div>').join('') +
+    '</div></section>' +
+    '<section class="pop-sec"><h4 class="pop-h">Services in ' + p.name + '</h4><div class="pop-links">' +
+      p.services.map(si => link('service', si, pad(si + 1), SERVICES[si].title)).join('') +
+    '</div></section>' +
+    '<footer class="pop-foot">' + prevNext('pillar', i, PILLARS.map(x => x.name)) + cta + '</footer>';
+}
+
+function serviceHTML(i) {
+  const s = SERVICES[i], p = PILLARS[s.pillar];
+  return '' +
+    '<header class="pop-hero">' +
+      '<span class="pop-mark" aria-hidden="true">' + pad(i + 1) + '</span>' +
+      '<div class="eyebrow"><span class="dot"></span>Service ' + pad(i + 1) + ' of 08 — ' + p.name + '</div>' +
+      '<h2 class="display pop-title" id="pop-title">' + s.title + '</h2>' +
+      '<p class="body-lg pop-lead">' + s.lead + '</p>' +
+    '</header>' +
+    '<div class="pop-grid">' +
+      '<section><h4 class="pop-h">What is included</h4><ol class="pop-list">' +
+        s.inc.map((t, n) => '<li><span class="k">' + pad(n + 1) + '</span><span>' + t + '</span></li>').join('') +
+      '</ol></section>' +
+      '<section><h4 class="pop-h">What you get</h4><ul class="pop-tags">' + s.get.map(g => '<li>' + g + '</li>').join('') + '</ul>' +
+        '<h4 class="pop-h">Right for</h4><p class="body-lg pop-out">' + s.fit + '</p></section>' +
+    '</div>' +
+    '<section class="pop-sec"><h4 class="pop-h">Part of</h4><div class="pop-links">' +
+      link('pillar', s.pillar, pad(s.pillar + 1), p.name + ' — ' + p.sub) +
+    '</div></section>' +
+    '<footer class="pop-foot">' + prevNext('service', i, SERVICES.map(x => x.title)) + cta + '</footer>';
+}
+
+function leadHTML(i) {
+  const l = LEADS[i], p = PILLARS[l.pillar];
+  return '' +
+    '<header class="pop-hero">' +
+      '<span class="pop-mark" aria-hidden="true">' + pad(i + 1) + '</span>' +
+      '<div class="eyebrow"><span class="dot"></span>Lead ' + pad(i + 1) + ' of 04 — ' + p.name + '</div>' +
+      '<h2 class="display pop-title" id="pop-title">' + l.role + '</h2>' +
+      '<p class="pop-sub">' + l.grp + '</p>' +
+      '<p class="body-lg pop-lead">' + l.lead + '</p>' +
+    '</header>' +
+    '<div class="pop-grid">' +
+      '<section><h4 class="pop-h">What they lead</h4><ol class="pop-list">' +
+        l.leads.map((t, n) => '<li><span class="k">' + pad(n + 1) + '</span><span>' + t + '</span></li>').join('') +
+      '</ol></section>' +
+      '<section><h4 class="pop-h">Part of</h4><div class="pop-links">' +
+        link('pillar', l.pillar, pad(l.pillar + 1), p.name + ' — ' + p.sub) +
+      '</div></section>' +
+    '</div>' +
+    '<section class="pop-sec"><h4 class="pop-h">Services they lead</h4><div class="pop-links">' +
+      l.services.map(si => link('service', si, pad(si + 1), SERVICES[si].title)).join('') +
+    '</div></section>' +
+    '<footer class="pop-foot">' + prevNext('lead', i, LEADS.map(x => x.role)) + cta + '</footer>';
+}
+
+/* ------------------------------------------------------------ the sheet */
+const pop = $('#pop'), panel = $('.pop-panel', pop), scroller = $('#pop-scroll'), kick = $('#pop-kick');
+let lastFocus = null, hideTimer = 0;
+
+function render(kind, i) {
+  pop.classList.remove('in');
+  scroller.innerHTML = kind === 'pillar' ? pillarHTML(i) : kind === 'lead' ? leadHTML(i) : serviceHTML(i);
+  kick.innerHTML = '<b>' + pad(i + 1) + '</b> — ' +
+    (kind === 'pillar' ? 'How we work' : kind === 'lead' ? 'The team' : 'Services');
+  [].forEach.call(scroller.children, (el, n) => el.style.setProperty('--d', (140 + n * 80) + 'ms'));
+  scroller.scrollTop = 0;
+  void scroller.offsetWidth;   /* the new content resolves its resting state before it is called in */
+  requestAnimationFrame(() => pop.classList.add('in'));
+}
+function open(kind, i) {
+  clearTimeout(hideTimer);
+  if (!pop.classList.contains('open')) lastFocus = document.activeElement;
+  pop.hidden = false;
+  render(kind, i);
+  void pop.offsetWidth;
+  pop.classList.add('open');
+  document.documentElement.classList.add('pop-open');
+  $('.pop-x', pop).focus({ preventScroll: true });
+}
+function close(then) {
+  if (!pop.classList.contains('open')) return;
+  pop.classList.remove('open', 'in');
+  document.documentElement.classList.remove('pop-open');
+  hideTimer = setTimeout(() => { pop.hidden = true; scroller.innerHTML = ''; }, REDUCE ? 0 : 800);
+  if (then) then();
+  else if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+}
+
+pop.addEventListener('click', e => {
+  const t = e.target.closest('[data-pop-close], [data-open], [data-pop-cta]');
+  if (!t) return;
+  if (t.hasAttribute('data-pop-close')) { close(); return; }
+  if (t.hasAttribute('data-pop-cta')) {
+    e.preventDefault();
+    close(() => {
+      const target = $('#eternity');
+      if (target) scrollTo({ top: target.offsetTop - 40, behavior: REDUCE ? 'auto' : 'smooth' });
+    });
+    return;
+  }
+  const [kind, i] = t.getAttribute('data-open').split(':');
+  render(kind, +i);
+  $('.pop-x', pop).focus({ preventScroll: true });
+});
+addEventListener('keydown', e => {
+  if (!pop.classList.contains('open')) return;
+  if (e.key === 'Escape') { close(); return; }
+  if (e.key !== 'Tab') return;
+  const f = $$('button, a[href], [tabindex]:not([tabindex="-1"])', panel).filter(el => el.offsetParent !== null);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+/* the cursor ring only knows the elements that existed when it was wired */
+const dot = $('#cursor');
+if (dot) {
+  pop.addEventListener('mouseover', e => dot.classList.toggle('act', !!e.target.closest('[data-cursor]')));
+  pop.addEventListener('mouseleave', () => dot.classList.remove('act'));
+}
+
+function trigger(el, label, fn) {
+  el.setAttribute('role', 'button');
+  el.setAttribute('aria-haspopup', 'dialog');
+  el.setAttribute('aria-label', label);
+  el.tabIndex = 0;
+  el.addEventListener('click', fn);
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); }
+  });
+}
+$$('.card[data-view]').forEach(el => {
+  const i = +el.dataset.view; if (!PILLARS[i]) return;
+  trigger(el, 'Open ' + PILLARS[i].name + ': ' + PILLARS[i].sub, () => open('pillar', i));
+});
+$$('.les[data-les]').forEach(el => {
+  const i = +el.dataset.les; if (!SERVICES[i]) return;
+  trigger(el, 'Open ' + SERVICES[i].title.replace('&amp;', '&'), () => open('service', i));
+});
+
+/* ------------------------------------------------------------ the team */
+/* every banner opens its lead's sheet */
+$$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('lead', +el.dataset.lead)));
+
+/* The banners as cloth. The motion is ThreeUI's Washi Noren (WovenCloth,
+   washi variant): a Verlet sheet pinned along the rod, gravity, damping, and
+   an indoor draft that travels down the fabric, each piece on its own beat.
+   Here it is one sheet per banner and the draft runs at half strength, so
+   they breathe rather than billow. Each sheet's print is painted from its
+   button's own layout, so the type moves with the fabric. */
+(function cloth() {
+  const host = $('.tc-banners');
+  const T = window.THREE;
+  if (!host || REDUCE || !T) return;
+  const bans = $$('.tc-ban', host);
+  const canvas = document.createElement('canvas');
+  canvas.className = 'tc-cloth';
+  canvas.setAttribute('aria-hidden', 'true');
+  let renderer;
+  try { renderer = new T.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' }); }
+  catch (e) { return; }
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(DPR);
+  renderer.setClearColor(0x000000, 0);
+  renderer.outputEncoding = T.sRGBEncoding;
+  host.classList.add('is-cloth');
+  host.prepend(canvas);
+
+  const scene = new T.Scene();
+  /* r149's legacy lights carry a factor of pi, so these sum to about the
+     print's own colour where the cloth faces the camera, darker in its folds */
+  scene.add(new T.AmbientLight(0xffffff, 0.19));
+  const key = new T.DirectionalLight(0xfff1dc, 0.22); key.position.set(-0.45, 0.6, 1); scene.add(key);
+  const ember = new T.DirectionalLight(0xffa36a, 0.10); ember.position.set(0.9, -0.3, 0.5); scene.add(ember);
+  const camera = new T.PerspectiveCamera(30, 1, 1, 20000);
+
+  /* the washi solver's own constants; the draft is scaled, nothing else */
+  const GX = 12, GY = 26, BWU = 1.2, GRAV = -1.65, DAMP = 0.986, DT = 0.016, DRAFT = 0.5;
+  const PAD = { x: 44, top: 0, bottom: 70 };
+  let sheets = [], t = 180 * DT;
+
+  function spaced(x, str, X, Y, sp, align) {
+    let w = 0; for (const ch of str) w += x.measureText(ch).width + sp; w -= sp;
+    let cx = align === 'right' ? X - w : X;
+    for (const ch of str) { x.fillText(ch, cx, Y); cx += x.measureText(ch).width + sp; }
+    return w;
+  }
+  /* the banner's print, laid out exactly where the page put each piece */
+  function paint(btn, warm) {
+    const r = btn.getBoundingClientRect(), W = r.width, H = r.height, S = DPR;
+    const c = document.createElement('canvas'); c.width = Math.round(W * S); c.height = Math.round(H * S);
+    const x = c.getContext('2d'); x.scale(S, S);
+    const rel = el => { const b = el.getBoundingClientRect(); return { x: b.left - r.left, y: b.top - r.top, w: b.width, h: b.height }; };
+    x.beginPath(); x.moveTo(0, 0); x.lineTo(W, 0); x.lineTo(W, H); x.lineTo(W / 2, H * .93); x.lineTo(0, H); x.closePath(); x.clip();
+    let g = x.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, warm ? '#1a0f0e' : '#0e1317'); g.addColorStop(1, warm ? '#0b0708' : '#07090c');
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    g = x.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0, 'rgba(255,255,255,.035)'); g.addColorStop(.34, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(0,0,0,.28)');
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    x.fillStyle = 'rgba(255,255,255,.014)';
+    for (let y = 0; y < H; y += 3) x.fillRect(0, y, W, 1);          /* the weave, barely there */
+    x.strokeStyle = 'rgba(223,231,224,.08)'; x.lineWidth = 1;
+    x.beginPath(); x.moveTo(6.5, H); x.lineTo(6.5, 6.5); x.lineTo(W - 6.5, 6.5); x.lineTo(W - 6.5, H); x.stroke();
+    x.textBaseline = 'alphabetic';
+    const top = rel(btn.querySelector('.tc-ban-top'));
+    x.font = '500 10px Onest';
+    x.fillStyle = '#e0231c'; spaced(x, btn.querySelector('.tc-ban-top b').textContent, top.x, top.y + 10, 2.4);
+    x.fillStyle = '#78837c'; spaced(x, btn.querySelector('.tc-ban-top span').textContent.toUpperCase(), top.x + top.w, top.y + 10, 2.4, 'right');
+    /* the role, set down the cloth the way vertical-rl sets it */
+    const vEl = btn.querySelector('.tc-ban-v'), v = rel(vEl), fs = parseFloat(getComputedStyle(vEl).fontSize);
+    x.font = '400 ' + fs + 'px Onest'; x.fillStyle = '#dfe7e0';
+    const sp = fs * .08, lh = fs * 1.12, len = s2 => { let w = 0; for (const ch of s2) w += x.measureText(ch).width + sp; return w; };
+    const cols = []; let line = '';
+    for (const w of vEl.textContent.trim().toUpperCase().split(/\s+/)) {
+      const tryL = line ? line + ' ' + w : w;
+      if (line && len(tryL) > v.h + 2) { cols.push(line); line = w; } else line = tryL;
+    }
+    if (line) cols.push(line);
+    x.textBaseline = 'middle';
+    cols.forEach((col, j) => {
+      x.save(); x.translate(v.x + v.w - lh * (j + .5), v.y); x.rotate(Math.PI / 2);
+      spaced(x, col, 0, 0, sp); x.restore();
+    });
+    const seal = rel(btn.querySelector('.tc-ban-seal')), sx = seal.x + seal.w / 2, sy = seal.y + seal.h / 2, sr = seal.w / 2;
+    x.fillStyle = warm ? 'rgba(224,35,28,.18)' : 'rgba(224,35,28,.12)';
+    x.beginPath(); x.arc(sx, sy, sr + (warm ? 7 : 5), 0, Math.PI * 2); x.fill();
+    x.save(); x.shadowColor = warm ? 'rgba(224,35,28,.9)' : 'rgba(224,35,28,.6)'; x.shadowBlur = warm ? 30 : 18;
+    x.fillStyle = '#e0231c'; x.beginPath(); x.arc(sx, sy, sr, 0, Math.PI * 2); x.fill(); x.restore();
+    if (warm) {
+      const dEl = btn.querySelector('.tc-ban-d'), d = rel(dEl);
+      x.font = '300 13px Onest'; x.fillStyle = '#aab4ad'; x.textBaseline = 'alphabetic';
+      let y = d.y - 10 + 15, ln = '';
+      for (const w of dEl.textContent.trim().split(/\s+/)) {
+        const tryL = ln ? ln + ' ' + w : w;
+        if (ln && x.measureText(tryL).width > d.w) { x.fillText(ln, d.x, y); y += 20.8; ln = w; } else ln = tryL;
+      }
+      if (ln) x.fillText(ln, d.x, y);
+    }
+    return c;
+  }
+
+  function build() {
+    sheets.forEach(sh => { scene.remove(sh.mesh); sh.mesh.geometry.dispose(); sh.mat.dispose(); sh.tex.forEach(tx => tx.dispose()); });
+    sheets = [];
+    const hr = host.getBoundingClientRect();
+    const cw = hr.width + PAD.x * 2, ch = hr.height + PAD.top + PAD.bottom;
+    Object.assign(canvas.style, { left: -PAD.x + 'px', top: -PAD.top + 'px', width: cw + 'px', height: ch + 'px' });
+    renderer.setSize(cw, ch, false);
+    camera.aspect = cw / ch;
+    const dist = (ch / 2) / Math.tan(15 * Math.PI / 180);
+    camera.position.set(0, 0, dist); camera.near = dist / 20; camera.far = dist * 20;
+    camera.updateProjectionMatrix();
+    const aniso = renderer.capabilities.getMaxAnisotropy();
+    bans.forEach((btn, i) => {
+      const r = btn.getBoundingClientRect();
+      const k = r.width / BWU, BHU = r.height / k;
+      const geo = new T.PlaneGeometry(BWU, BHU, GX, GY);
+      const tex = [paint(btn, false), paint(btn, true)].map(cv => {
+        const tx = new T.CanvasTexture(cv); tx.encoding = T.sRGBEncoding; tx.anisotropy = aniso; return tx;
+      });
+      const uMix = { value: 0 };
+      /* the print glows a little on its own, so the type keeps the page's bone
+         white where the dimmer cloth around it stays in shadow */
+      const mat = new T.MeshStandardMaterial({ map: tex[0], alphaTest: .5, side: T.DoubleSide, roughness: .9, metalness: 0,
+        emissive: 0x4a4a4a, emissiveMap: tex[0] });
+      mat.onBeforeCompile = sh => {
+        sh.uniforms.map2 = { value: tex[1] }; sh.uniforms.uMix = uMix;
+        sh.fragmentShader = 'uniform sampler2D map2;\nuniform float uMix;\n' + sh.fragmentShader.replace('#include <map_fragment>',
+          '#ifdef USE_MAP\n  vec4 sampledDiffuseColor = mix(texture2D(map, vUv), texture2D(map2, vUv), uMix);\n  diffuseColor *= sampledDiffuseColor;\n#endif');
+      };
+      const mesh = new T.Mesh(geo, mat);
+      mesh.scale.setScalar(k);
+      mesh.position.set(r.left - hr.left + r.width / 2 + PAD.x - cw / 2, -(r.top - hr.top + r.height / 2 + PAD.top - ch / 2), 0);
+      scene.add(mesh);
+      const pos = geo.attributes.position, N = (GX + 1) * (GY + 1);
+      const cur = new Float32Array(N * 3), prev = new Float32Array(N * 3), rest = new Float32Array(N * 3);
+      for (let n = 0; n < N; n++) {
+        cur[n * 3] = prev[n * 3] = rest[n * 3] = pos.getX(n);
+        cur[n * 3 + 1] = prev[n * 3 + 1] = rest[n * 3 + 1] = pos.getY(n);
+      }
+      const rh = BWU / GX, rv = BHU / GY;
+      sheets.push({ i, mesh, mat, tex, uMix, pos, geo, N, cur, prev, rest, rh, rv, rd: Math.sqrt(rh * rh + rv * rv), hover: 0, want: 0 });
+    });
+    for (let s = 0; s < 180; s++) sheets.forEach(sh => step(sh, s * DT));
+    sheets.forEach(commit);
+  }
+
+  const id = (ix, iy) => ix + iy * (GX + 1);
+  function wind(sh, ix, iy, tt) {
+    const cx = ix / GX, cy = iy / GY, ph = sh.i * 2.1, gain = DRAFT * (1 + .7 * sh.hover);
+    const gust = 0.40 + 0.28 * Math.sin(tt * 0.37 + ph * 0.6) + 0.15 * Math.sin(tt * 0.93 + ph);
+    const travel = tt * 1.2 - cy * 2.2 + ph;
+    const amp = 1.5 * cy * gain;
+    const fz = (Math.sin(travel) + 0.35 * Math.sin(travel * 1.8 + cx * 3.4)) * amp * gust;
+    const fx = Math.sin(tt * 0.44 + ph) * 0.20 * cy * gain;
+    return [fx, -0.18 * cy, fz];
+  }
+  function solve(sh, a, b, rl) {
+    const c = sh.cur;
+    let dx = c[b * 3] - c[a * 3], dy = c[b * 3 + 1] - c[a * 3 + 1], dz = c[b * 3 + 2] - c[a * 3 + 2];
+    const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1e-6, f = (d - rl) / d * 0.5;
+    dx *= f; dy *= f; dz *= f;
+    const pa = a <= GX, pb = b <= GX;   /* the top row is pinned to the rod */
+    if (!pa && !pb) { c[a * 3] += dx; c[a * 3 + 1] += dy; c[a * 3 + 2] += dz; c[b * 3] -= dx; c[b * 3 + 1] -= dy; c[b * 3 + 2] -= dz; }
+    else if (pa && !pb) { c[b * 3] -= dx * 2; c[b * 3 + 1] -= dy * 2; c[b * 3 + 2] -= dz * 2; }
+    else if (!pa && pb) { c[a * 3] += dx * 2; c[a * 3 + 1] += dy * 2; c[a * 3 + 2] += dz * 2; }
+  }
+  function step(sh, tt) {
+    const { cur, prev } = sh;
+    for (let iy = 1; iy <= GY; iy++) for (let ix = 0; ix <= GX; ix++) {
+      const n = id(ix, iy), f = wind(sh, ix, iy, tt);
+      for (let k = 0; k < 3; k++) {
+        const j = n * 3 + k, a = k === 1 ? f[1] + GRAV : f[k];
+        const v = (cur[j] - prev[j]) * DAMP;
+        prev[j] = cur[j]; cur[j] = cur[j] + v + a * DT * DT;
+      }
+    }
+    for (let it = 0; it < 3; it++) {
+      for (let iy = 0; iy <= GY; iy++) for (let ix = 0; ix < GX; ix++) solve(sh, id(ix, iy), id(ix + 1, iy), sh.rh);
+      for (let iy = 0; iy < GY; iy++) for (let ix = 0; ix <= GX; ix++) solve(sh, id(ix, iy), id(ix, iy + 1), sh.rv);
+      for (let iy = 0; iy < GY; iy++) for (let ix = 0; ix < GX; ix++) {
+        solve(sh, id(ix, iy), id(ix + 1, iy + 1), sh.rd); solve(sh, id(ix + 1, iy), id(ix, iy + 1), sh.rd);
+      }
+    }
+    for (let n = 0; n <= GX * 3 + 2; n++) { cur[n] = sh.rest[n]; prev[n] = sh.rest[n]; }
+  }
+  function commit(sh) {
+    for (let n = 0; n < sh.N; n++) sh.pos.setXYZ(n, sh.cur[n * 3], sh.cur[n * 3 + 1], sh.cur[n * 3 + 2]);
+    sh.pos.needsUpdate = true; sh.geo.computeVertexNormals();
+  }
+
+  bans.forEach((btn, i) => {
+    const on = v => () => { if (sheets[i]) sheets[i].want = v; };
+    btn.addEventListener('mouseenter', on(1)); btn.addEventListener('mouseleave', on(0));
+    btn.addEventListener('focus', on(1)); btn.addEventListener('blur', on(0));
+  });
+
+  let raf = 0, seen = false;
+  function frame() {
+    raf = 0;
+    if (!seen || document.hidden) return;
+    t += DT;
+    sheets.forEach(sh => {
+      sh.hover += (sh.want - sh.hover) * .07;
+      sh.uMix.value = sh.hover;
+      step(sh, t); commit(sh);
+    });
+    renderer.render(scene, camera);
+    raf = requestAnimationFrame(frame);
+  }
+  const go = () => { if (!raf && seen && !document.hidden) raf = requestAnimationFrame(frame); };
+  new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); go(); }, { rootMargin: '120px 0px' }).observe(host);
+  document.addEventListener('visibilitychange', go);
+  let rt = 0;
+  addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { build(); renderer.render(scene, camera); }, 160); });
+  canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); host.classList.remove('is-cloth'); canvas.remove(); seen = false; });
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => {
+    build(); renderer.render(scene, camera); go();
+  });
+})();
 })();
 </script>
 </body>
