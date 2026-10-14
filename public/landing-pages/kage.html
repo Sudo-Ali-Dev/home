@@ -417,7 +417,14 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
      Four banners hung from one rod, the role read down the cloth. They sway
      a little, out of step, like the sakura and maple cut-outs; the one you
      call warms through to vermilion and says what that lead does. */
-.tc-banners{ position:relative; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(12px,2.2vw,36px); padding-top:30px; }
+/* the four tracks are spelled out: Chrome will not tween a repeat() list */
+.tc-banners{ position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap:clamp(12px,2.2vw,36px); padding-top:30px;
+  align-items:start; transition:grid-template-columns .75s var(--ease-io); }
+/* one banner opened in place: it takes the room and the rest hang slim beside it */
+.tc-banners[data-open="0"]{ grid-template-columns:minmax(0,3.2fr) minmax(0,.62fr) minmax(0,.62fr) minmax(0,.62fr); }
+.tc-banners[data-open="1"]{ grid-template-columns:minmax(0,.62fr) minmax(0,3.2fr) minmax(0,.62fr) minmax(0,.62fr); }
+.tc-banners[data-open="2"]{ grid-template-columns:minmax(0,.62fr) minmax(0,.62fr) minmax(0,3.2fr) minmax(0,.62fr); }
+.tc-banners[data-open="3"]{ grid-template-columns:minmax(0,.62fr) minmax(0,.62fr) minmax(0,.62fr) minmax(0,3.2fr); }
 .tc-banners::before{ content:''; position:absolute; left:-2%; right:-2%; top:10px; height:2px; border-radius:2px;
   background:linear-gradient(90deg,transparent,rgba(223,231,224,.42) 5%,rgba(223,231,224,.42) 95%,transparent); }
 .tc-ban{ position:relative; display:block; width:100%; height:clamp(420px,62vh,620px); text-align:left; cursor:pointer;
@@ -428,26 +435,54 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   background:linear-gradient(90deg,rgba(255,255,255,.035),transparent 34%,rgba(0,0,0,.28)), linear-gradient(#0e1317,#07090c);
   transition:background .7s var(--ease); }
 .tc-ban-cloth::after{ content:''; position:absolute; inset:6px 6px 0; border:1px solid rgba(223,231,224,.08); border-bottom:0; }
-.tc-ban:hover .tc-ban-cloth, .tc-ban:focus-visible .tc-ban-cloth{
+.tc-ban:not(.open):hover .tc-ban-cloth, .tc-ban:not(.open):focus-within .tc-ban-cloth{
   background:linear-gradient(90deg,rgba(255,255,255,.04),transparent 34%,rgba(0,0,0,.24)), linear-gradient(#1a0f0e,#0b0708); }
 .tc-ban-top{ position:absolute; left:clamp(16px,1.6vw,24px); right:clamp(16px,1.6vw,24px); top:22px; display:flex; justify-content:space-between;
   font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
 .tc-ban-top b{ font-weight:500; color:var(--vermilion); }
+.tc-ban-n{ position:absolute; left:clamp(16px,1.8vw,26px); top:56px; max-width:44%;
+  font-size:clamp(20px,1.9vw,30px); line-height:1.08; letter-spacing:-.005em; color:var(--bone); }
 .tc-ban-v{ position:absolute; right:clamp(16px,1.8vw,28px); top:62px; max-height:calc(100% - 170px); writing-mode:vertical-rl;
   font-size:clamp(30px,3vw,48px); line-height:1.12; letter-spacing:.08em; text-transform:uppercase; color:var(--bone); }
 .tc-ban-seal{ position:absolute; left:clamp(16px,1.8vw,26px); bottom:15%; width:26px; height:26px; border-radius:50%;
   background:var(--vermilion); box-shadow:0 0 0 5px rgba(224,35,28,.12), 0 0 18px rgba(224,35,28,.6); transition:box-shadow .6s; }
-.tc-ban:hover .tc-ban-seal, .tc-ban:focus-visible .tc-ban-seal{ box-shadow:0 0 0 7px rgba(224,35,28,.18), 0 0 30px rgba(224,35,28,.9); }
+.tc-ban:hover .tc-ban-seal, .tc-ban:focus-within .tc-ban-seal{ box-shadow:0 0 0 7px rgba(224,35,28,.18), 0 0 30px rgba(224,35,28,.9); }
 .tc-ban-d{ position:absolute; left:clamp(16px,1.8vw,26px); right:44%; bottom:25%; margin:0; font-size:13px; line-height:1.6; color:#aab4ad;
   opacity:0; transform:translate3d(0,10px,0); transition:opacity .6s var(--ease), transform .8s var(--ease-out); }
-.tc-ban:hover .tc-ban-d, .tc-ban:focus-visible .tc-ban-d{ opacity:1; transform:none; }
+.tc-ban:not(.open):hover .tc-ban-d, .tc-ban:not(.open):focus-within .tc-ban-d{ opacity:1; transform:none; }
 @keyframes tc-sway{ from{ transform:rotate(-.55deg); } to{ transform:rotate(.55deg); } }
-.tc-ban:focus-visible{ outline:1px solid var(--vermilion); outline-offset:4px; }
+.tc-ban-hit{ position:absolute; inset:0; z-index:3; cursor:pointer; }
+.tc-ban-hit:focus-visible{ outline:1px solid var(--vermilion); outline-offset:4px; }
+.tc-ban .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+/* slim, the banner keeps its number and its role; open, it hands the cloth to the person */
+.tc-banners[data-open] .tc-ban:not(.open) .tc-ban-n,
+.tc-banners[data-open] .tc-ban:not(.open) .tc-ban-d{ display:none; }
+.tc-ban.open{ cursor:pointer; height:clamp(520px,68vh,660px); }
+.tc-ban.open .tc-ban-hit, .tc-ban.open .tc-ban-d, .tc-ban.open .tc-ban-seal{ display:none; }
+.tc-ban.open .tc-ban-n{ top:58px; max-width:none; white-space:nowrap; font-size:clamp(34px,3.4vw,54px); line-height:1.02; }
+.tc-ban.open .tc-ban-n br{ display:none; }
+.tc-more{ position:absolute; z-index:2; left:clamp(16px,1.8vw,28px); right:clamp(150px,13vw,210px); top:clamp(132px,16vh,154px); bottom:12%;
+  display:flex; flex-direction:column; visibility:hidden; opacity:0; transform:translate3d(0,12px,0);
+  transition:opacity .5s var(--ease), transform .7s var(--ease-out), visibility 0s linear .5s; }
+.tc-ban.open .tc-more{ visibility:visible; opacity:1; transform:none; transition:opacity .6s var(--ease) .5s, transform .8s var(--ease-out) .5s, visibility 0s; }
+.tc-more-bio{ margin:0; max-width:48ch; font-size:clamp(15px,1.15vw,17px); line-height:1.65; font-weight:300; color:var(--bone); }
+.tc-more-cols{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(18px,2.4vw,40px); margin-top:clamp(20px,3.4vh,32px); }
+.tc-more-h{ display:block; margin-bottom:10px; font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
+.tc-more ul{ list-style:none; margin:0; padding:0; }
+.tc-more li{ display:flex; gap:12px; padding:5px 0; font-size:14px; line-height:1.5; color:#c9d2cb; }
+.tc-more li::before{ content:''; flex:none; width:10px; height:2px; margin-top:.72em; border-radius:1px; background:var(--vermilion); }
+.tc-more-sv{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+.tc-more-sv .pop-go{ font-size:14px; }
+.tc-more-act{ display:flex; align-items:center; gap:22px; margin-top:auto; padding-top:24px; }
+.tc-more-act .cta{ margin-top:0; }
+.tc-more-x{ font-size:11px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); transition:color .3s; }
+.tc-more-x:hover, .tc-more-x:focus-visible{ color:var(--bone); }
+.tc-more :focus-visible{ outline:1px solid var(--vermilion); outline-offset:4px; }
 /* with the cloth running, the buttons stay for focus and clicks and the
    fabric is drawn underneath them, type and all */
 .tc-cloth{ position:absolute; z-index:0; display:block; pointer-events:none; }
 .tc-banners.is-cloth .tc-ban{ z-index:1; animation:none; }
-.tc-banners.is-cloth .tc-ban > span{ opacity:0 !important; }
+.tc-banners.is-cloth .tc-ban > span{ opacity:0 !important; transition:opacity .3s var(--ease); }
 @media (max-width:1080px){
   .tc-banners{ grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:56px; }
   /* two rows: each banner carries its own length of rod */
@@ -458,110 +493,165 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 @media (max-width:820px){
   .tc-ban{ height:360px; }
   .tc-ban-v{ font-size:26px; }
+  .tc-ban-n{ top:48px; font-size:17px; }
   .tc-ban-d{ right:16px; bottom:24%; }
+  .tc-banners[data-open]{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .tc-ban.open{ grid-column:1 / -1; order:-1; height:auto; min-height:560px; padding:0 0 110px; }
+  .tc-ban.open .tc-ban-n{ position:relative; display:block; top:auto; left:auto; margin:56px 0 0 18px; font-size:34px; }
+  .tc-ban.open .tc-more{ position:relative; inset:auto; margin:22px 92px 0 18px; }
+  .tc-more-cols{ grid-template-columns:1fr; }
+  .tc-more-act{ flex-wrap:wrap; }
 }
 @media (prefers-reduced-motion:reduce){
   .tc-ban{ animation:none; }
+  .tc-banners, .tc-more{ transition:none !important; }
 }
 
 /* ------------------------------------------------------ detail sheets
-   Think, Make and Grow, and each of the eight services, open as a sheet
-   drawn in from the right over a dimmed sanctuary. It sits under the grain,
-   so it is the same paper as the page, and over the nav and the rail. */
+   Three kinds, each made of the thing that opened it. A Think/Make/Grow
+   card opens out to the whole frame, so you stand in the place it showed.
+   A service plate unfolds into its scope sheet, still ruled like the grid
+   it came from. A team banner comes down off its own rod. Every one closes
+   back into what opened it. */
 html.pop-open{ overflow:hidden; scrollbar-gutter:stable; }
 .pop{ position:fixed; inset:0; z-index:57; }
 .pop[hidden]{ display:none; }
-.pop-scrim{ position:absolute; inset:0; background:rgba(3,5,8,.62);
+.pop-scrim{ position:absolute; inset:0; background:rgba(3,5,8,.66);
   -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); opacity:0; transition:opacity .6s var(--ease); }
 .pop.open .pop-scrim{ opacity:1; }
-.pop-panel{
-  position:absolute; top:0; right:0; bottom:0; width:min(1080px,94vw); display:flex; flex-direction:column;
-  background:rgba(6,9,12,.97); border-left:1px solid var(--line); outline:0;
-  transform:translate3d(104%,0,0); transition:transform .8s var(--ease-out);
-}
-.pop.open .pop-panel{ transform:none; }
-.pop-bar{ flex:none; display:flex; align-items:center; gap:16px; height:var(--nav-h); padding:0 var(--pad);
-  border-bottom:1px solid var(--line-soft); }
-.pop-kick{ font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
-.pop-kick b{ color:var(--vermilion); font-weight:500; }
-.pop-x{ flex:none; width:42px; height:42px; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%;
-  transition:background .4s var(--ease), border-color .4s, transform .6s var(--ease-out); }
+.pop-panel{ position:absolute; outline:0; overflow:hidden; }
+.pop-bg{ position:absolute; inset:0; pointer-events:none; }
+.pop-scroll{ position:relative; height:100%; overflow-y:auto; overscroll-behavior:contain;
+  scrollbar-width:thin; scrollbar-color:rgba(223,231,224,.18) transparent; }
+.pop-x{ position:absolute; z-index:4; top:22px; right:var(--pad); width:44px; height:44px; display:grid; place-items:center;
+  border:1px solid var(--line); border-radius:50%; background:rgba(5,7,10,.5);
+  opacity:0; transition:opacity .5s var(--ease) .3s, background .4s var(--ease), border-color .4s, transform .6s var(--ease-out); }
+.pop.open .pop-x{ opacity:1; }
 .pop-x svg{ width:14px; height:14px; }
 .pop-x:hover{ background:var(--bone); border-color:var(--bone); transform:rotate(90deg); }
 .pop-x:hover path{ stroke:#05070a; }
-.pop-scroll{ flex:1 1 auto; overflow-y:auto; overscroll-behavior:contain;
-  padding:clamp(28px,5vh,56px) var(--pad) clamp(44px,8vh,96px);
-  scrollbar-width:thin; scrollbar-color:rgba(223,231,224,.18) transparent; }
-.pop-scroll > *{ opacity:0; transform:translate3d(0,22px,0);
-  transition:opacity .8s var(--ease-out) var(--d,0ms), transform 1s var(--ease-out) var(--d,0ms); }
-.pop.in .pop-scroll > *{ opacity:1; transform:none; }
-.pop .eyebrow .dot{ display:inline-block; width:5px; height:5px; margin-right:6px; vertical-align:middle; border-radius:50%;
-  background:var(--vermilion); box-shadow:0 0 10px var(--vermilion); }
-.pop-art{ position:relative; aspect-ratio:21/9; overflow:hidden; margin-bottom:clamp(28px,5vh,48px);
-  outline:1px solid var(--line-soft); outline-offset:-1px; }
-.pop-art::before{ content:''; position:absolute; inset:0;
-  background:linear-gradient(180deg,rgba(3,6,9,.10) 30%,rgba(3,6,9,.80)), var(--img) center / cover no-repeat;
-  transform:scale(1.08); transition:transform 1.8s var(--ease-out); }
-.pop.in .pop-art::before{ transform:none; }
-.pop-art > span{ position:absolute; left:20px; right:20px; bottom:16px; display:flex; justify-content:space-between;
-  font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(223,231,224,.72); }
-.pop-hero{ position:relative; padding-bottom:clamp(28px,4.4vh,48px); border-bottom:1px solid var(--line-soft); }
-.pop-mark{ position:absolute; right:-.04em; top:-.12em; z-index:-1; pointer-events:none;
-  font-size:clamp(150px,22vw,320px); font-weight:500; line-height:.8; letter-spacing:-.04em;
-  color:rgba(223,231,224,.04); -webkit-text-stroke:1px rgba(223,231,224,.10); }
-.pop-title{ margin-top:18px; max-width:16ch; font-size:clamp(34px,4.6vw,68px); line-height:1.0; }
-.pop-title--xl{ font-size:clamp(64px,10vw,150px); line-height:.9; letter-spacing:-.03em; }
-.pop-sub{ margin:14px 0 0; font-size:11px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--bone-dim); }
-.pop-lead{ max-width:58ch; margin:22px 0 0; }
-.pop-h{ margin:0 0 18px; font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
-.pop-grid{ display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); gap:clamp(28px,5vw,80px);
-  padding:clamp(30px,5vh,56px) 0; border-bottom:1px solid var(--line-soft); }
-.pop-list{ list-style:none; margin:0; padding:0; border-top:1px solid var(--line-soft); }
-.pop-list li{ display:grid; grid-template-columns:44px minmax(0,1fr); gap:14px; padding:16px 0;
-  border-bottom:1px solid var(--line-soft); font-size:clamp(15px,1.2vw,18px); line-height:1.45; color:#c9d2cb; }
-.pop .k{ font-size:11px; letter-spacing:.16em; color:var(--muted); font-variant-numeric:tabular-nums; padding-top:4px; }
-.pop-list b{ display:block; font-weight:400; color:var(--bone); }
-.pop-list .d{ display:block; margin-top:4px; font-size:13px; line-height:1.6; color:#909b95; }
-.pop-tags{ list-style:none; margin:0 0 30px; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
-.pop-tags li{ padding:9px 14px; border:1px solid var(--line); border-radius:100px; font-size:12px; letter-spacing:.03em; color:var(--bone-dim); }
-.pop-out{ margin:0; }
-.pop-sec{ padding-top:clamp(30px,5vh,56px); }
-.pop-steps{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); }
-.pop-step{ display:flex; flex-direction:column; gap:12px; min-height:180px; padding:24px; background:rgba(5,7,10,.92); }
-.pop-step .k{ color:var(--vermilion); padding:0; }
-.pop-step h5{ margin:0; font-size:clamp(18px,1.6vw,24px); font-weight:400; }
-.pop-step p{ margin:0; font-size:13px; line-height:1.6; color:#909b95; }
-.pop-links{ border-top:1px solid var(--line-soft); }
-.pop-link{ position:relative; display:grid; grid-template-columns:44px minmax(0,1fr) auto; align-items:center; gap:14px;
-  width:100%; padding:20px 0; text-align:left; border-bottom:1px solid var(--line-soft);
-  font-size:clamp(17px,1.6vw,24px); font-weight:300; transition:padding .5s var(--ease-out); }
-.pop-link .k{ padding:0; transition:color .4s; }
-.pop-link svg{ transition:transform .5s var(--ease-out); }
-.pop-link:hover, .pop-link:focus-visible{ padding-left:clamp(8px,1.2vw,18px); }
-.pop-link:hover .k, .pop-link:focus-visible .k{ color:var(--vermilion); }
-.pop-link:hover svg{ transform:translate3d(2px,-2px,0); }
-.pop-link .bar{ position:absolute; left:0; bottom:-1px; height:1px; width:100%; background:var(--vermilion);
-  transform:scaleX(0); transform-origin:left; transition:transform .7s var(--ease-out); }
-.pop-link:hover .bar, .pop-link:focus-visible .bar{ transform:scaleX(1); }
-.pop-foot{ display:flex; align-items:center; justify-content:space-between; gap:20px 32px; flex-wrap:wrap;
-  margin-top:clamp(34px,6vh,64px); }
-.pop-foot .cta{ margin-top:0; }
-.pop-pn{ display:flex; gap:clamp(18px,3vw,40px); }
-.pop-pn button{ display:flex; flex-direction:column; gap:6px; text-align:left; }
-.pop-pn button:last-child{ text-align:right; }
-.pop-pn small{ font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
-.pop-pn span{ font-size:14px; color:var(--bone-dim); transition:color .3s; }
-.pop-pn button:hover span{ color:var(--bone); }
 .pop :focus-visible{ outline:1px solid var(--vermilion); outline-offset:4px; }
+/* content is called in once its frame has arrived */
+.pop [data-in]{ opacity:0; transform:translate3d(0,16px,0);
+  transition:opacity .7s var(--ease-out) var(--d,0ms), transform .9s var(--ease-out) var(--d,0ms); }
+.pop.in [data-in]{ opacity:1; transform:none; }
+.pop .cta{ margin-top:0; }
+.pop-go{ display:inline-flex; align-items:center; gap:10px; text-align:left; color:var(--bone);
+  border-bottom:1px solid rgba(223,231,224,.22); padding-bottom:4px; transition:border-color .4s, color .4s; }
+.pop-go svg{ flex:none; transition:transform .5s var(--ease-out); }
+.pop-go:hover, .pop-go:focus-visible{ border-color:var(--vermilion); }
+.pop-go:hover svg{ transform:translate3d(2px,-2px,0); }
+
+/* — Think / Make / Grow: through the card */
+.pop[data-kind="pillar"] .pop-panel{ inset:0; background:#05070a;
+  clip-path:inset(var(--ft,0px) var(--fr,0px) var(--fb,0px) var(--fl,0px));
+  transition:clip-path .95s var(--ease-io); }
+.pop[data-kind="pillar"].open .pop-panel{ clip-path:inset(0 0 0 0); }
+.pop[data-kind="pillar"] .pop-bg{
+  background:
+    linear-gradient(0deg, rgba(5,7,10,.96) 0%, rgba(5,7,10,.82) 30%, rgba(5,7,10,.22) 64%, rgba(5,7,10,.30) 100%),
+    linear-gradient(90deg, rgba(5,7,10,.55), rgba(5,7,10,0) 60%),
+    var(--img) center / cover no-repeat;
+  transform:scale(1.08); transition:transform 2.6s var(--ease-out); }
+.pop[data-kind="pillar"].in .pop-bg{ transform:none; }
+/* one screen: the place on top, the practice named low on the left, and a
+   single ruled band along the foot carrying the steps and its services */
+.pv{ position:relative; min-height:100%; display:grid; grid-template-rows:auto 1fr auto auto;
+  padding:22px var(--pad) clamp(22px,4vh,40px); }
+.pv-tabs{ display:flex; gap:clamp(18px,2.4vw,34px); height:44px; align-items:center; }
+.pv-tabs button{ position:relative; padding:6px 0; font-size:11px; font-weight:500; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--muted); transition:color .3s; }
+.pv-tabs button::after{ content:''; position:absolute; left:0; right:.24em; bottom:0; height:1px; background:var(--vermilion);
+  transform:scaleX(0); transform-origin:left; transition:transform .6s var(--ease-out); }
+.pv-tabs button:hover{ color:var(--bone-dim); }
+.pv-tabs button[aria-current="true"]{ color:var(--bone); }
+.pv-tabs button[aria-current="true"]::after{ transform:scaleX(1); }
+.pv-hero{ grid-row:3; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:end; gap:32px;
+  padding-bottom:clamp(26px,4.6vh,50px); }
+.pv-word{ margin:0 0 clamp(16px,2.6vh,26px) -.04em; font-size:clamp(88px,11.6vw,204px); font-weight:600; line-height:.82;
+  letter-spacing:.01em; text-transform:uppercase;
+  background:linear-gradient(#e2ece5,#97a89c); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.pv-sub{ margin:0; font-size:11px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--bone-dim); }
+.pv-lead{ margin:14px 0 0; max-width:46ch; font-size:clamp(17px,1.32vw,21px); line-height:1.55; font-weight:300; color:var(--bone);
+  text-shadow:0 1px 24px rgba(3,6,8,.8); }
+.pv-act{ padding-bottom:4px; }
+.pv-band{ grid-row:4; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.1fr); column-gap:clamp(18px,2.4vw,40px); }
+.pv-steps{ position:relative; grid-column:1 / 4; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:inherit;
+  list-style:none; margin:0; padding:clamp(22px,3.4vh,32px) 0 0; }
+.pv-steps::before, .pv-steps::after{ content:''; position:absolute; left:0; right:0; top:0; height:1px; }
+.pv-steps::before{ background:rgba(223,231,224,.20); }
+.pv-steps::after{ background:var(--vermilion); box-shadow:0 0 12px rgba(224,35,28,.55); transform:scaleX(0); transform-origin:left;
+  transition:transform 1.5s var(--ease-out) .9s; }
+.pop.in .pv-steps::after{ transform:scaleX(1); }
+.pv-steps li{ position:relative; }
+.pv-steps li::before{ content:''; position:absolute; left:0; top:calc(clamp(22px,3.4vh,32px) * -1 - 4px); width:9px; height:9px; border-radius:50%;
+  background:#05070a; border:1px solid var(--vermilion); }
+.pv-steps b{ display:block; font-size:clamp(18px,1.6vw,26px); font-weight:400; text-transform:uppercase; letter-spacing:-.005em; }
+.pv-steps span{ display:block; margin-top:8px; max-width:30ch; font-size:13px; line-height:1.6; color:#9aa5a0; }
+.pv-svc{ position:relative; grid-column:4; display:flex; flex-direction:column; align-items:flex-start; gap:10px;
+  padding:clamp(22px,3.4vh,32px) 0 0 clamp(18px,2.4vw,40px); border-left:1px solid var(--line-soft); }
+.pv-svc::before{ content:''; position:absolute; left:0; right:0; top:0; height:1px; background:rgba(223,231,224,.20); }
+.pv-svc small{ margin-bottom:2px; font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
+.pv-svc .pop-go{ font-size:14px; }
+
+/* — Services: the plate unfolds into its scope sheet */
+.pop[data-kind="service"]{ --pw:min(1080px, calc(100% - 2 * var(--pad))); --ph:min(660px, calc(100% - 2 * clamp(20px,5vh,56px))); }
+.pop[data-kind="service"] .pop-panel{ left:50%; top:50%; width:var(--pw); height:var(--ph); translate:-50% -50%;
+  background:rgba(6,9,12,.97); outline:1px solid var(--line); outline-offset:-1px;
+  transform:translate3d(var(--fx,0px),var(--fy,0px),0) scale(var(--fsx,1),var(--fsy,1)); opacity:0;
+  transition:transform .8s var(--ease-io), opacity .3s var(--ease); }
+.pop[data-kind="service"].open .pop-panel{ transform:none; opacity:1; }
+.pop[data-kind="service"] .pop-x{ top:calc((100% - var(--ph)) / 2 + 14px); right:calc((100% - var(--pw)) / 2 + 14px); }
+.sv{ display:grid; grid-template-rows:auto 1fr auto; min-height:100%; }
+.sv-top{ display:flex; align-items:center; gap:22px; padding:22px 92px 20px 28px; border-bottom:1px solid var(--line-soft); }
+.sv-k{ font-size:11px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
+.sv-k b{ font-weight:500; color:var(--vermilion); margin-right:8px; }
+/* the services grid in miniature: the same 3 + 3 / 2 + 2 + 2 plates */
+.sv-map{ margin-left:auto; display:grid; grid-template-columns:repeat(6,14px); gap:3px; }
+.sv-map button{ height:10px; border:1px solid rgba(223,231,224,.28); transition:background .3s, border-color .3s; }
+.sv-map button:nth-child(-n+2){ grid-column:span 3; }
+.sv-map button:nth-child(n+3){ grid-column:span 2; }
+.sv-map button:hover{ border-color:var(--bone); }
+.sv-map button[aria-current="true"]{ background:var(--vermilion); border-color:var(--vermilion); box-shadow:0 0 10px rgba(224,35,28,.6); }
+.sv-body{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+.sv-main{ display:flex; flex-direction:column; padding:clamp(28px,4.4vh,48px) 28px; border-right:1px solid var(--line-soft); }
+.sv-title{ font-size:clamp(32px,3.5vw,54px); line-height:1.02; max-width:13ch; }
+.sv-lead{ margin:22px 0 0; max-width:44ch; font-size:16px; line-height:1.7; font-weight:300; color:#b4bfb7; }
+.sv-fit{ margin:auto 0 0; padding-top:30px; max-width:40ch; font-size:15px; line-height:1.6; color:#c9d2cb; }
+.sv-fit span, .sv-h{ display:block; margin-bottom:10px; font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
+.sv-scope{ padding:clamp(28px,4.4vh,48px) 28px; }
+.sv-h{ margin:0 0 12px; }
+.sv-inc{ list-style:none; margin:0 0 clamp(24px,4vh,36px); padding:0; border-top:1px solid var(--line-soft); }
+.sv-inc li{ display:flex; gap:14px; padding:13px 0; border-bottom:1px solid var(--line-soft); font-size:15px; line-height:1.5; color:#c9d2cb; }
+.sv-inc li::before{ content:''; flex:none; width:10px; height:2px; margin-top:.72em; border-radius:1px; background:var(--vermilion); }
+.sv-get{ margin:0; max-width:40ch; font-size:16px; line-height:1.65; color:var(--bone); }
+.sv-foot{ display:flex; align-items:center; justify-content:space-between; gap:18px 28px; flex-wrap:wrap;
+  padding:18px 28px; border-top:1px solid var(--line-soft); }
+.sv-foot .pop-go{ font-size:14px; color:#9aa5a0; }
+.sv-foot .pop-go b{ font-weight:400; color:var(--bone); }
+
+
 @media (max-width:820px){
-  .pop-panel{ width:100vw; border-left:0; }
-  .pop-grid{ grid-template-columns:1fr; }
-  .pop-steps{ grid-template-columns:1fr; }
-  .pop-step{ min-height:0; }
-  .pop-art{ aspect-ratio:16/10; }
+  .pv{ grid-template-rows:auto auto auto; padding-bottom:48px; }
+  .pv-hero{ grid-template-columns:1fr; gap:26px; padding:clamp(28vh,34vh,280px) 0 34px; }
+  .pv-word{ font-size:clamp(80px,26vw,140px); }
+  .pv-band{ grid-template-columns:1fr; row-gap:30px; }
+  .pv-steps{ grid-column:auto; grid-template-columns:1fr; row-gap:22px; padding:0 0 0 30px; }
+  .pv-steps::before, .pv-steps::after{ left:4px; right:auto; top:4px; bottom:0; width:1px; height:auto; }
+  .pv-steps::after{ transform:scaleY(0); transform-origin:top; }
+  .pop.in .pv-steps::after{ transform:scaleY(1); }
+  .pv-steps li::before{ left:-30px; top:6px; }
+  .pv-svc{ grid-column:auto; padding:24px 0 0; border-left:0; }
+  .pop[data-kind="pillar"] .pop-bg{ background:
+    linear-gradient(180deg, rgba(5,7,10,.20) 0%, rgba(5,7,10,.55) 26%, rgba(5,7,10,.94) 52%), var(--img) center top / cover no-repeat; }
+  .pop[data-kind="service"]{ --pw:100%; --ph:100%; }
+  .pop[data-kind="service"] .pop-x{ top:14px; right:14px; }
+  .sv-body{ grid-template-columns:1fr; }
+  .sv-main{ border-right:0; border-bottom:1px solid var(--line-soft); }
+  .sv-top{ padding-right:72px; }
 }
 @media (prefers-reduced-motion:reduce){
-  .pop-scrim, .pop-panel, .pop-scroll > *, .pop-art::before{ transition:none !important; }
+  .pop-scrim, .pop-panel, .pop-bg, .pop-x, .pop [data-in], .pv-steps::after{ transition:none !important; }
 }
 
 /* — chapter IV: eternity */
@@ -1084,7 +1174,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <!-- ============================================================ hero -->
 <section class="hero" id="hero" data-cam="0">
   <div class="hero-top">
-    <div class="eyebrow" data-rv="fade"><span class="dot"></span> 00 — House of Marketing &amp; Execution</div>
+    <div class="eyebrow" data-rv="fade"><span class="dot"></span> Home — House of Marketing &amp; Execution</div>
     <h1 class="display h-hero">
       <span class="mask-line"><span>Where strategy</span></span>
       <span class="mask-line"><span>becomes execution.</span></span>
@@ -1121,18 +1211,6 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 
 <!-- ============================================================ chapter I -->
 <section class="sec" id="gate" data-cam="1">
-  <!-- foreground: the wall arrives first, the pine at the edge, the grass last -->
-  <div class="fg" data-fg="gate" aria-hidden="true">
-    <span class="fg-el fg-wall" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/temple-wall.webp" alt="" width="1536" height="884" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-pine" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/pine-tree.webp" alt="" width="1024" height="1438" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
-    </span>
-  </div>
   <div class="sec-head" data-rv="fade">
     <span class="k"><b>01</b> — The House</span><span class="rule"></span><span class="k">One roof</span>
   </div>
@@ -1161,21 +1239,6 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 
 <!-- ============================================================ chapter II -->
 <section class="sec" id="pathways" data-cam="2">
-  <!-- foreground: the garden frames the mosaic from the sides and the two lower corners -->
-  <div class="fg" data-fg="pathways" aria-hidden="true">
-    <span class="fg-el fg-sakura fg-el--sway" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-leaves fg-el--sway" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/maple-leaves.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-lantern" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/stone-lantern.webp" alt="" width="1024" height="1499" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-bush" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
-    </span>
-  </div>
   <div class="sec-head" data-rv="fade">
     <span class="k"><b>02</b> — How We Work</span><span class="rule"></span><span class="k">Think · Make · Grow</span>
   </div>
@@ -1209,18 +1272,6 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 
 <!-- ============================================================ chapter III -->
 <section class="sec" id="lessons" data-cam="3">
-  <!-- foreground: a low periphery for the atlas — wall fragment, basalt, one stand of grass -->
-  <div class="fg" data-fg="lessons" aria-hidden="true">
-    <span class="fg-el fg-wall fg-el--flip" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/temple-wall.webp" alt="" width="1536" height="884" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-stones" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
-    </span>
-  </div>
   <div class="sec-head" data-rv="fade">
     <span class="k"><b>03</b> — Services</span><span class="rule"></span><span class="k">Eight disciplines</span>
   </div>
@@ -1294,54 +1345,95 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
       people who plan your work are the people who make it.</p>
   </div>
   <div class="tc-banners">
-      <button class="tc-ban" type="button" data-lead="0" data-cursor style="--sd:7.2s; --sdl:-1.1s">
+      <div class="tc-ban" data-i="0" style="--sd:7.2s; --sdl:-1.1s">
+        <button class="tc-ban-hit" type="button" aria-expanded="false" aria-controls="tc-more-0" data-cursor>
+          <span class="sr">Sara Malik, Strategy Lead</span></button>
         <span class="tc-ban-cloth"></span>
         <span class="tc-ban-top"><b>01</b><span>Think</span></span>
+        <span class="tc-ban-n">Sara <br>Malik</span>
         <span class="tc-ban-v">Strategy Lead</span>
         <span class="tc-ban-d">Owns positioning, research and the plan every campaign is built on.</span>
         <span class="tc-ban-seal"></span>
-      </button>
-      <button class="tc-ban" type="button" data-lead="1" data-cursor style="--sd:8.1s; --sdl:-3.4s">
+        <div class="tc-more" id="tc-more-0" role="region" aria-label="Sara Malik">
+          <p class="tc-more-bio">Every engagement starts at this desk. Sara runs the research, finds the position worth owning and writes the plan the rest of the house builds on.</p>
+          <div class="tc-more-cols">
+            <div><span class="tc-more-h">What they lead</span><ul><li>Positioning and brand platforms</li><li>Research and audience insight</li><li>Go-to-market and campaign plans</li></ul></div>
+            <div><span class="tc-more-h">Services they run</span><div class="tc-more-sv"><button class="pop-go" type="button" data-svc="0" data-cursor><span>Brand Strategy &amp; Consulting</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></button><button class="pop-go" type="button" data-svc="2" data-cursor><span>Marketing Strategy &amp; Campaigns</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></button><button class="pop-go" type="button" data-svc="6" data-cursor><span>Research &amp; Intelligence</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></button></div></div>
+          </div>
+          <div class="tc-more-act">
+            <a class="cta" href="#eternity" data-cursor><i></i><span>Start a project</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></a>
+            <button class="tc-more-x" type="button" data-cursor>Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="tc-ban" data-i="1" style="--sd:8.1s; --sdl:-3.4s">
+        <button class="tc-ban-hit" type="button" aria-expanded="false" aria-controls="tc-more-1" data-cursor>
+          <span class="sr">Omar Haddad, Creative Director</span></button>
         <span class="tc-ban-cloth"></span>
         <span class="tc-ban-top"><b>02</b><span>Make</span></span>
+        <span class="tc-ban-n">Omar <br>Haddad</span>
         <span class="tc-ban-v">Creative Director</span>
         <span class="tc-ban-d">Turns the strategy into ideas, platforms and content worth remembering.</span>
         <span class="tc-ban-seal"></span>
-      </button>
-      <button class="tc-ban" type="button" data-lead="2" data-cursor style="--sd:6.6s; --sdl:-2.2s">
+        <div class="tc-more" id="tc-more-1" role="region" aria-label="Omar Haddad">
+          <p class="tc-more-bio">Omar turns the plan into an idea people remember, then sets the look, the words and the formats that carry it on every channel.</p>
+          <div class="tc-more-cols">
+            <div><span class="tc-more-h">What they lead</span><ul><li>Creative platforms and big ideas</li><li>Art direction and copy</li><li>Content systems and formats</li></ul></div>
+            <div><span class="tc-more-h">Services they run</span><div class="tc-more-sv"><button class="pop-go" type="button" data-svc="3" data-cursor><span>Creative Strategy &amp; Content</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></button><button class="pop-go" type="button" data-svc="1" data-cursor><span>Personal Branding</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></button></div></div>
+          </div>
+          <div class="tc-more-act">
+            <a class="cta" href="#eternity" data-cursor><i></i><span>Start a project</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></a>
+            <button class="tc-more-x" type="button" data-cursor>Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="tc-ban" data-i="2" style="--sd:6.6s; --sdl:-2.2s">
+        <button class="tc-ban-hit" type="button" aria-expanded="false" aria-controls="tc-more-2" data-cursor>
+          <span class="sr">Lena Ortiz, Head of Production</span></button>
         <span class="tc-ban-cloth"></span>
         <span class="tc-ban-top"><b>03</b><span>Make</span></span>
+        <span class="tc-ban-n">Lena <br>Ortiz</span>
         <span class="tc-ban-v">Head of Production</span>
         <span class="tc-ban-d">Runs the shoots, edits and rollouts, and delivers them on time and on brief.</span>
         <span class="tc-ban-seal"></span>
-      </button>
-      <button class="tc-ban" type="button" data-lead="3" data-cursor style="--sd:7.7s; --sdl:-5.0s">
+        <div class="tc-more" id="tc-more-2" role="region" aria-label="Lena Ortiz">
+          <p class="tc-more-bio">Lena makes the work real: crews, shoots, edits and delivery, planned so the finished piece looks like the idea that was signed off.</p>
+          <div class="tc-more-cols">
+            <div><span class="tc-more-h">What they lead</span><ul><li>Shoots, edits and post-production</li><li>Schedules, budgets and crews</li><li>Rollout to every channel</li></ul></div>
+            <div><span class="tc-more-h">Services they run</span><div class="tc-more-sv"><button class="pop-go" type="button" data-svc="4" data-cursor><span>Production &amp; Content Execution</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></button></div></div>
+          </div>
+          <div class="tc-more-act">
+            <a class="cta" href="#eternity" data-cursor><i></i><span>Start a project</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></a>
+            <button class="tc-more-x" type="button" data-cursor>Close</button>
+          </div>
+        </div>
+      </div>
+      <div class="tc-ban" data-i="3" style="--sd:7.7s; --sdl:-5.0s">
+        <button class="tc-ban-hit" type="button" aria-expanded="false" aria-controls="tc-more-3" data-cursor>
+          <span class="sr">Daniel Cho, Growth Lead</span></button>
         <span class="tc-ban-cloth"></span>
         <span class="tc-ban-top"><b>04</b><span>Grow</span></span>
+        <span class="tc-ban-n">Daniel <br>Cho</span>
         <span class="tc-ban-v">Growth Lead</span>
         <span class="tc-ban-d">Builds the performance, data and technology that make every result compound.</span>
         <span class="tc-ban-seal"></span>
-      </button>
-    </div>
+        <div class="tc-more" id="tc-more-3" role="region" aria-label="Daniel Cho">
+          <p class="tc-more-bio">Daniel puts the work in front of the right people, reads the numbers every week and builds the systems that make results compound.</p>
+          <div class="tc-more-cols">
+            <div><span class="tc-more-h">What they lead</span><ul><li>Performance media</li><li>Websites, data and dashboards</li><li>CRM and automation</li></ul></div>
+            <div><span class="tc-more-h">Services they run</span><div class="tc-more-sv"><button class="pop-go" type="button" data-svc="5" data-cursor><span>Digital Growth &amp; Technology</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></button><button class="pop-go" type="button" data-svc="7" data-cursor><span>Artist &amp; Entertainment Marketing</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></button></div></div>
+          </div>
+          <div class="tc-more-act">
+            <a class="cta" href="#eternity" data-cursor><i></i><span>Start a project</span><svg viewBox="0 0 14 14" fill="none" width="13" height="13" aria-hidden="true"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></a>
+            <button class="tc-more-x" type="button" data-cursor>Close</button>
+          </div>
+        </div>
+      </div>
+  </div>
 </section>
 
 <!-- ============================================================ chapter IV -->
 <section class="sec fin" id="eternity" data-cam="4">
-  <!-- foreground: the closing horizon: hill, ruins, grass, and the last branch -->
-  <div class="fg" data-fg="eternity" aria-hidden="true">
-    <span class="fg-el fg-hill" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/hill.webp" alt="" width="1774" height="887" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-ruins" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/shrine-ruins.webp" alt="" width="1536" height="1001" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-sakura" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
-    </span>
-  </div>
   <div class="eyebrow" data-rv="fade">05 — Start a Project</div>
   <h2 class="display" data-rv="up">Come Home</h2>
   <p class="body-lg" data-rv="up">Bring us the brief, the idea or just the problem. We will take it from
@@ -1354,18 +1446,6 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 
 <!-- ============================================================ footer -->
 <footer class="foot" data-cam="5">
-  <!-- foreground: one planting along the lower edge of the colophon -->
-  <div class="fg" data-fg="foot" aria-hidden="true">
-    <span class="fg-el fg-bush" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-stones" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" loading="lazy" decoding="async">
-    </span>
-  </div>
   <div class="foot-grid">
     <div class="foot-brand">
       <svg viewBox="0 0 44 44" fill="none" width="34" height="34" aria-hidden="true">
@@ -1414,14 +1494,12 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <div class="pop" id="pop" role="dialog" aria-modal="true" aria-labelledby="pop-title" hidden>
   <div class="pop-scrim" data-pop-close></div>
   <div class="pop-panel">
-    <div class="pop-bar">
-      <span class="pop-kick" id="pop-kick"></span><span class="rule"></span>
-      <button class="pop-x" type="button" data-pop-close data-cursor aria-label="Close">
-        <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5 11.5 11.5M11.5 2.5 2.5 11.5" stroke="#dfe7e0" stroke-width="1.3"/></svg>
-      </button>
-    </div>
+    <div class="pop-bg"></div>
     <div class="pop-scroll" id="pop-scroll"></div>
   </div>
+  <button class="pop-x" type="button" data-pop-close data-cursor aria-label="Close">
+    <svg viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5 11.5 11.5M11.5 2.5 2.5 11.5" stroke="#dfe7e0" stroke-width="1.3"/></svg>
+  </button>
 </div>
 
 <script src="secret-pathways-assets/three.min.js"></script>
@@ -5103,21 +5181,6 @@ const PILLARS = [
     services: [5, 7] }
 ];
 
-const LEADS = [
-  { role: 'Strategy Lead', pillar: 0, grp: 'Brand &amp; Marketing Strategy',
-    lead: 'Every engagement starts at this desk. The Strategy Lead runs the research, finds the position worth owning and writes the plan the rest of the house builds on.',
-    leads: ['Positioning and brand platforms', 'Research and audience insight', 'Go-to-market and campaign plans'], services: [0, 2, 6] },
-  { role: 'Creative Director', pillar: 1, grp: 'Creative &amp; Content',
-    lead: 'The Creative Director turns the plan into an idea people remember, then sets the look, the words and the formats that carry it on every channel.',
-    leads: ['Creative platforms and big ideas', 'Art direction and copy', 'Content systems and formats'], services: [3, 1] },
-  { role: 'Head of Production', pillar: 1, grp: 'Production &amp; Execution',
-    lead: 'The Head of Production makes the work real: crews, shoots, edits and delivery, planned so the finished piece looks like the idea that was signed off.',
-    leads: ['Shoots, edits and post-production', 'Schedules, budgets and crews', 'Rollout to every channel'], services: [4] },
-  { role: 'Growth Lead', pillar: 2, grp: 'Digital Growth &amp; Technology',
-    lead: 'The Growth Lead puts the work in front of the right people, reads the numbers every week and builds the systems that make results compound.',
-    leads: ['Performance media', 'Websites, data and dashboards', 'CRM and automation'], services: [5, 7] }
-];
-
 const SERVICES = [
   { title: 'Brand Strategy &amp; Consulting', pillar: 0,
     lead: 'A brand is the reason someone chooses you before they compare prices. We define what yours stands for, how it speaks and where it is going, then stay on as advisers while it grows.',
@@ -5162,109 +5225,107 @@ const SERVICES = [
 ];
 
 /* ------------------------------------------------------------ templates */
-const link = (kind, i, k, label) =>
-  '<button class="pop-link" type="button" data-open="' + kind + ':' + i + '" data-cursor>' +
-  '<span class="k">' + k + '</span><span>' + label + '</span>' + ARROW + '<i class="bar"></i></button>';
 const cta = '<a class="cta" href="#eternity" data-pop-cta data-cursor><i></i><span>Start a project</span>' + ARROW + '</a>';
-function prevNext(kind, i, list) {
-  const n = list.length, a = (i + n - 1) % n, b = (i + 1) % n;
-  return '<div class="pop-pn">' +
-    '<button type="button" data-open="' + kind + ':' + a + '" data-cursor><small>Previous</small><span>' + list[a] + '</span></button>' +
-    '<button type="button" data-open="' + kind + ':' + b + '" data-cursor><small>Next</small><span>' + list[b] + '</span></button></div>';
-}
+const BASE = { pillar: 520, service: 420 };
+const din = (kind, n) => ' data-in style="--d:' + (BASE[kind] + n * 90) + 'ms"';
+const go = (kind, i, html) => '<button class="pop-go" type="button" data-open="' + kind + ':' + i + '" data-cursor><span>' + html + '</span>' + ARROW + '</button>';
 
 function pillarHTML(i) {
-  const p = PILLARS[i];
-  return '' +
-    '<div class="pop-art" style="--img:url(\'' + IMG + p.img + '\')"><span><span>' + pad(i + 1) + ' / 03</span><span>' + p.sub + '</span></span></div>' +
-    '<header class="pop-hero">' +
-      '<div class="eyebrow"><span class="dot"></span>' + pad(i + 1) + ' — How we work</div>' +
-      '<h2 class="display pop-title pop-title--xl" id="pop-title">' + p.name + '</h2>' +
-      '<p class="pop-sub">' + p.sub + '</p>' +
-      '<p class="body-lg pop-lead">' + p.lead + '</p>' +
-    '</header>' +
-    '<div class="pop-grid">' +
-      '<section><h4 class="pop-h">What happens here</h4><ol class="pop-list">' +
-        p.what.map((w, n) => '<li><span class="k">' + pad(n + 1) + '</span><span><b>' + w[0] + '</b><span class="d">' + w[1] + '</span></span></li>').join('') +
-      '</ol></section>' +
-      '<section><h4 class="pop-h">You leave with</h4><p class="body-lg pop-out">' + p.out + '</p></section>' +
+  const p = PILLARS[i], d = n => din('pillar', n);
+  return '<div class="pv">' +
+    '<nav class="pv-tabs" aria-label="How we work">' +
+      PILLARS.map((x, j) => '<button type="button" data-open="pillar:' + j + '" aria-current="' + (j === i) + '" data-cursor>' + x.name + '</button>').join('') +
+    '</nav>' +
+    '<div class="pv-hero">' +
+      '<div>' +
+        '<h2 class="pv-word" id="pop-title"' + d(0) + '>' + p.name + '</h2>' +
+        '<p class="pv-sub"' + d(1) + '>' + p.sub + '</p>' +
+        '<p class="pv-lead"' + d(2) + '>' + p.lead + '</p>' +
+      '</div>' +
+      '<div class="pv-act"' + d(3) + '>' + cta + '</div>' +
     '</div>' +
-    '<section class="pop-sec"><h4 class="pop-h">How it runs</h4><div class="pop-steps">' +
-      p.steps.map((st, n) => '<div class="pop-step"><span class="k">' + pad(n + 1) + '</span><h5>' + st[0] + '</h5><p>' + st[1] + '</p></div>').join('') +
-    '</div></section>' +
-    '<section class="pop-sec"><h4 class="pop-h">Services in ' + p.name + '</h4><div class="pop-links">' +
-      p.services.map(si => link('service', si, pad(si + 1), SERVICES[si].title)).join('') +
-    '</div></section>' +
-    '<footer class="pop-foot">' + prevNext('pillar', i, PILLARS.map(x => x.name)) + cta + '</footer>';
+    '<div class="pv-band">' +
+      '<ol class="pv-steps"' + d(3) + '>' + p.steps.map(st => '<li><b>' + st[0] + '</b><span>' + st[1] + '</span></li>').join('') + '</ol>' +
+      '<div class="pv-svc"' + d(4) + '><small>Services in ' + p.name + '</small>' +
+        p.services.map(si => go('service', si, SERVICES[si].title)).join('') + '</div>' +
+    '</div>' +
+  '</div>';
 }
 
 function serviceHTML(i) {
-  const s = SERVICES[i], p = PILLARS[s.pillar];
-  return '' +
-    '<header class="pop-hero">' +
-      '<span class="pop-mark" aria-hidden="true">' + pad(i + 1) + '</span>' +
-      '<div class="eyebrow"><span class="dot"></span>Service ' + pad(i + 1) + ' of 08 — ' + p.name + '</div>' +
-      '<h2 class="display pop-title" id="pop-title">' + s.title + '</h2>' +
-      '<p class="body-lg pop-lead">' + s.lead + '</p>' +
+  const s = SERVICES[i], p = PILLARS[s.pillar], d = n => din('service', n);
+  const get = s.get.map((g, n) => n === 0 ? g : g.charAt(0).toLowerCase() + g.slice(1));
+  const sentence = get.slice(0, -1).join(', ') + ' and ' + get[get.length - 1] + '.';
+  return '<div class="sv">' +
+    '<header class="sv-top">' +
+      '<span class="sv-k"><b>' + pad(i + 1) + '</b>' + p.name + '</span>' +
+      '<div class="sv-map" role="group" aria-label="All services">' +
+        SERVICES.map((x, j) => '<button type="button" data-open="service:' + j + '" aria-current="' + (j === i) + '" aria-label="' +
+          x.title.replace('&amp;', '&') + '" title="' + x.title.replace('&amp;', '&') + '" data-cursor></button>').join('') +
+      '</div>' +
     '</header>' +
-    '<div class="pop-grid">' +
-      '<section><h4 class="pop-h">What is included</h4><ol class="pop-list">' +
-        s.inc.map((t, n) => '<li><span class="k">' + pad(n + 1) + '</span><span>' + t + '</span></li>').join('') +
-      '</ol></section>' +
-      '<section><h4 class="pop-h">What you get</h4><ul class="pop-tags">' + s.get.map(g => '<li>' + g + '</li>').join('') + '</ul>' +
-        '<h4 class="pop-h">Right for</h4><p class="body-lg pop-out">' + s.fit + '</p></section>' +
+    '<div class="sv-body">' +
+      '<div class="sv-main">' +
+        '<h2 class="display sv-title" id="pop-title"' + d(0) + '>' + s.title + '</h2>' +
+        '<p class="sv-lead"' + d(1) + '>' + s.lead + '</p>' +
+        '<p class="sv-fit"' + d(3) + '><span>Right for</span>' + s.fit + '</p>' +
+      '</div>' +
+      '<div class="sv-scope"' + d(2) + '>' +
+        '<h3 class="sv-h">What is included</h3>' +
+        '<ul class="sv-inc">' + s.inc.map(t => '<li>' + t + '</li>').join('') + '</ul>' +
+        '<h3 class="sv-h">You leave with</h3>' +
+        '<p class="sv-get">' + sentence + '</p>' +
+      '</div>' +
     '</div>' +
-    '<section class="pop-sec"><h4 class="pop-h">Part of</h4><div class="pop-links">' +
-      link('pillar', s.pillar, pad(s.pillar + 1), p.name + ' — ' + p.sub) +
-    '</div></section>' +
-    '<footer class="pop-foot">' + prevNext('service', i, SERVICES.map(x => x.title)) + cta + '</footer>';
+    '<footer class="sv-foot"' + d(4) + '>' +
+      go('pillar', s.pillar, 'Part of <b>' + p.name + '</b>, ' + p.sub.charAt(0).toLowerCase() + p.sub.slice(1)) + cta +
+    '</footer>' +
+  '</div>';
 }
 
-function leadHTML(i) {
-  const l = LEADS[i], p = PILLARS[l.pillar];
-  return '' +
-    '<header class="pop-hero">' +
-      '<span class="pop-mark" aria-hidden="true">' + pad(i + 1) + '</span>' +
-      '<div class="eyebrow"><span class="dot"></span>Lead ' + pad(i + 1) + ' of 04 — ' + p.name + '</div>' +
-      '<h2 class="display pop-title" id="pop-title">' + l.role + '</h2>' +
-      '<p class="pop-sub">' + l.grp + '</p>' +
-      '<p class="body-lg pop-lead">' + l.lead + '</p>' +
-    '</header>' +
-    '<div class="pop-grid">' +
-      '<section><h4 class="pop-h">What they lead</h4><ol class="pop-list">' +
-        l.leads.map((t, n) => '<li><span class="k">' + pad(n + 1) + '</span><span>' + t + '</span></li>').join('') +
-      '</ol></section>' +
-      '<section><h4 class="pop-h">Part of</h4><div class="pop-links">' +
-        link('pillar', l.pillar, pad(l.pillar + 1), p.name + ' — ' + p.sub) +
-      '</div></section>' +
-    '</div>' +
-    '<section class="pop-sec"><h4 class="pop-h">Services they lead</h4><div class="pop-links">' +
-      l.services.map(si => link('service', si, pad(si + 1), SERVICES[si].title)).join('') +
-    '</div></section>' +
-    '<footer class="pop-foot">' + prevNext('lead', i, LEADS.map(x => x.role)) + cta + '</footer>';
-}
 
 /* ------------------------------------------------------------ the sheet */
-const pop = $('#pop'), panel = $('.pop-panel', pop), scroller = $('#pop-scroll'), kick = $('#pop-kick');
-let lastFocus = null, hideTimer = 0;
+const pop = $('#pop'), panel = $('.pop-panel', pop), scroller = $('#pop-scroll'), bg = $('.pop-bg', pop);
+let lastFocus = null, hideTimer = 0, kindNow = '';
 
 function render(kind, i) {
   pop.classList.remove('in');
-  scroller.innerHTML = kind === 'pillar' ? pillarHTML(i) : kind === 'lead' ? leadHTML(i) : serviceHTML(i);
-  kick.innerHTML = '<b>' + pad(i + 1) + '</b> — ' +
-    (kind === 'pillar' ? 'How we work' : kind === 'lead' ? 'The team' : 'Services');
-  [].forEach.call(scroller.children, (el, n) => el.style.setProperty('--d', (140 + n * 80) + 'ms'));
+  pop.dataset.kind = kindNow = kind;
+  scroller.innerHTML = kind === 'pillar' ? pillarHTML(i) : serviceHTML(i);
+  bg.style.setProperty('--img', kind === 'pillar' ? "url('" + IMG + PILLARS[i].img + "')" : 'none');
   scroller.scrollTop = 0;
   void scroller.offsetWidth;   /* the new content resolves its resting state before it is called in */
-  requestAnimationFrame(() => pop.classList.add('in'));
+  requestAnimationFrame(() => requestAnimationFrame(() => pop.classList.add('in')));
 }
-function open(kind, i) {
+/* where the sheet starts from: the card's own rectangle, or the plate's */
+function from(kind, el) {
+  const ps = panel.style;
+  ['--ft', '--fr', '--fb', '--fl', '--fx', '--fy', '--fsx', '--fsy'].forEach(k => ps.removeProperty(k));
+  if (!el || REDUCE) return;
+  const r = el.getBoundingClientRect(), W = innerWidth, H = innerHeight;
+  if (kind === 'pillar') {
+    ps.setProperty('--ft', r.top + 'px'); ps.setProperty('--fr', (W - r.right) + 'px');
+    ps.setProperty('--fb', (H - r.bottom) + 'px'); ps.setProperty('--fl', r.left + 'px');
+  } else if (kind === 'service') {
+    const pr = panel.getBoundingClientRect();
+    ps.setProperty('--fx', (r.left + r.width / 2 - (pr.left + pr.width / 2)) + 'px');
+    ps.setProperty('--fy', (r.top + r.height / 2 - (pr.top + pr.height / 2)) + 'px');
+    ps.setProperty('--fsx', (r.width / pr.width).toFixed(4));
+    ps.setProperty('--fsy', (r.height / pr.height).toFixed(4));
+  }
+}
+function open(kind, i, el) {
   clearTimeout(hideTimer);
-  if (!pop.classList.contains('open')) lastFocus = document.activeElement;
+  const already = pop.classList.contains('open');
+  if (!already) lastFocus = el || document.activeElement;
   pop.hidden = false;
+  if (!already) pop.classList.remove('open');
   render(kind, i);
-  void pop.offsetWidth;
-  pop.classList.add('open');
+  if (!already) {
+    from(kind, el);
+    void panel.offsetWidth;
+    pop.classList.add('open');
+  }
   document.documentElement.classList.add('pop-open');
   $('.pop-x', pop).focus({ preventScroll: true });
 }
@@ -5272,7 +5333,7 @@ function close(then) {
   if (!pop.classList.contains('open')) return;
   pop.classList.remove('open', 'in');
   document.documentElement.classList.remove('pop-open');
-  hideTimer = setTimeout(() => { pop.hidden = true; scroller.innerHTML = ''; }, REDUCE ? 0 : 800);
+  hideTimer = setTimeout(() => { pop.hidden = true; scroller.innerHTML = ''; }, REDUCE ? 0 : 1000);
   if (then) then();
   else if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
 }
@@ -5290,14 +5351,17 @@ pop.addEventListener('click', e => {
     return;
   }
   const [kind, i] = t.getAttribute('data-open').split(':');
-  render(kind, +i);
+  /* moving between kinds re-draws the frame; within a kind only the content changes */
+  if (kind !== kindNow) { pop.classList.remove('open'); render(kind, +i); void panel.offsetWidth; pop.classList.add('open'); }
+  else render(kind, +i);
   $('.pop-x', pop).focus({ preventScroll: true });
 });
 addEventListener('keydown', e => {
   if (!pop.classList.contains('open')) return;
-  if (e.key === 'Escape') { close(); return; }
+  /* Esc closes the sheet and stops there, so an open banner behind it stays open */
+  if (e.key === 'Escape') { e.stopImmediatePropagation(); close(); return; }
   if (e.key !== 'Tab') return;
-  const f = $$('button, a[href], [tabindex]:not([tabindex="-1"])', panel).filter(el => el.offsetParent !== null);
+  const f = $$('button, a[href], [tabindex]:not([tabindex="-1"])', pop).filter(el => el.offsetParent !== null && !el.hasAttribute('hidden'));
   if (!f.length) return;
   const first = f[0], last = f[f.length - 1];
   if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -5322,16 +5386,40 @@ function trigger(el, label, fn) {
 }
 $$('.card[data-view]').forEach(el => {
   const i = +el.dataset.view; if (!PILLARS[i]) return;
-  trigger(el, 'Open ' + PILLARS[i].name + ': ' + PILLARS[i].sub, () => open('pillar', i));
+  trigger(el, 'Open ' + PILLARS[i].name + ': ' + PILLARS[i].sub, () => open('pillar', i, el.querySelector('.card-fr') || el));
 });
 $$('.les[data-les]').forEach(el => {
   const i = +el.dataset.les; if (!SERVICES[i]) return;
-  trigger(el, 'Open ' + SERVICES[i].title.replace('&amp;', '&'), () => open('service', i));
+  trigger(el, 'Open ' + SERVICES[i].title.replace('&amp;', '&'), () => open('service', i, el));
 });
 
 /* ------------------------------------------------------------ the team */
-/* every banner opens its lead's sheet */
-$$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('lead', +el.dataset.lead)));
+/* A banner opens where it hangs: it takes the width, the others hang slim
+   beside it, and its cloth is held still while it is read. */
+const team = $('.tc-banners'), flags = $$('.tc-ban', team);
+let flagOpen = -1, clothRelayout = null;
+function openFlag(i) {
+  if (i === flagOpen) i = -1;
+  const was = flagOpen; flagOpen = i;
+  if (i < 0) delete team.dataset.open; else team.dataset.open = i;
+  flags.forEach((f, j) => {
+    f.classList.toggle('open', j === i);
+    $('.tc-ban-hit', f).setAttribute('aria-expanded', String(j === i));
+  });
+  if (clothRelayout) clothRelayout();
+  if (i >= 0) setTimeout(() => $('.tc-more-x', flags[i]).focus({ preventScroll: true }), REDUCE ? 0 : 520);
+  else if (was >= 0) $('.tc-ban-hit', flags[was]).focus({ preventScroll: true });
+}
+flags.forEach((f, i) => {
+  $('.tc-ban-hit', f).addEventListener('click', () => openFlag(i));
+  $('.tc-more-x', f).addEventListener('click', () => openFlag(-1));
+  /* an open banner closes again on a click anywhere that isn't one of its links */
+  f.addEventListener('click', e => { if (f.classList.contains('open') && !e.target.closest('a, button')) openFlag(-1); });
+  $$('[data-svc]', f).forEach(b => b.addEventListener('click', () => open('service', +b.dataset.svc, b)));
+});
+addEventListener('keydown', e => {
+  if (e.key === 'Escape' && flagOpen >= 0 && !pop.classList.contains('open')) openFlag(-1);
+});
 
 /* The banners as cloth. The motion is ThreeUI's Washi Noren (WovenCloth,
    washi variant): a Verlet sheet pinned along the rod, gravity, damping, and
@@ -5353,16 +5441,31 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
   const DPR = Math.min(devicePixelRatio || 1, 2);
   renderer.setPixelRatio(DPR);
   renderer.setClearColor(0x000000, 0);
-  renderer.outputEncoding = T.sRGBEncoding;
   host.classList.add('is-cloth');
   host.prepend(canvas);
 
   const scene = new T.Scene();
-  /* r149's legacy lights carry a factor of pi, so these sum to about the
-     print's own colour where the cloth faces the camera, darker in its folds */
-  scene.add(new T.AmbientLight(0xffffff, 0.19));
-  const key = new T.DirectionalLight(0xfff1dc, 0.22); key.position.set(-0.45, 0.6, 1); scene.add(key);
-  const ember = new T.DirectionalLight(0xffa36a, 0.10); ember.position.set(0.9, -0.3, 0.5); scene.add(ember);
+  /* the print comes out exactly as the page paints it wherever the cloth
+     hangs at its usual angle (uRest, the sheet's mean facing); a fold turned toward the key light (high left) catches a
+     little sheen, one turned toward the ember (low right) a little warmth,
+     and one turned away sinks into shadow */
+  const VERT = [
+    'varying vec2 vUv;', 'varying vec3 vN;',
+    'void main() {', '  vUv = uv;', '  vN = normalMatrix * normal;',
+    '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);', '}'].join('\n');
+  const FRAG = [
+    'uniform sampler2D map;', 'uniform sampler2D map2;', 'uniform float uMix;', 'uniform vec3 uRest;',
+    'varying vec2 vUv;', 'varying vec3 vN;',
+    'const vec3 KEY = vec3(-0.36, 0.48, 0.8);', 'const vec3 EMBER = vec3(0.8392, -0.2797, 0.4662);',
+    'void main() {',
+    '  vec4 c = mix(texture2D(map, vUv), texture2D(map2, vUv), uMix);',
+    '  if (c.a < 0.5) discard;',
+    '  vec3 n = normalize(vN) * (gl_FrontFacing ? 1.0 : -1.0);',
+    '  float k = dot(n, KEY) - dot(uRest, KEY), e = dot(n, EMBER) - dot(uRest, EMBER);',
+    '  vec3 col = c.rgb * clamp(1.0 + 2.4 * min(k, 0.0), 0.45, 1.0)',
+    '    + vec3(1.0, 0.945, 0.863) * 0.36 * max(k, 0.0)',
+    '    + vec3(1.0, 0.64, 0.416) * 0.14 * max(e, 0.0);',
+    '  gl_FragColor = vec4(col, 1.0);', '}'].join('\n');
   const camera = new T.PerspectiveCamera(30, 1, 1, 20000);
 
   /* the washi solver's own constants; the draft is scaled, nothing else */
@@ -5377,8 +5480,8 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
     return w;
   }
   /* the banner's print, laid out exactly where the page put each piece */
-  function paint(btn, warm) {
-    const r = btn.getBoundingClientRect(), W = r.width, H = r.height, S = DPR;
+  function paint(btn, warm, S) {
+    const r = btn.getBoundingClientRect(), W = r.width, H = r.height;
     const c = document.createElement('canvas'); c.width = Math.round(W * S); c.height = Math.round(H * S);
     const x = c.getContext('2d'); x.scale(S, S);
     const rel = el => { const b = el.getBoundingClientRect(); return { x: b.left - r.left, y: b.top - r.top, w: b.width, h: b.height }; };
@@ -5387,7 +5490,10 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
     g.addColorStop(0, warm ? '#1a0f0e' : '#0e1317'); g.addColorStop(1, warm ? '#0b0708' : '#07090c');
     x.fillStyle = g; x.fillRect(0, 0, W, H);
     g = x.createLinearGradient(0, 0, W, 0);
-    g.addColorStop(0, 'rgba(255,255,255,.035)'); g.addColorStop(.34, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(0,0,0,.28)');
+    /* canvas blends stops unpremultiplied, so the clear stop is doubled: white
+       fades out, black fades in, and nothing grey shows between them as in CSS */
+    g.addColorStop(0, 'rgba(255,255,255,.035)'); g.addColorStop(.34, 'rgba(255,255,255,0)');
+    g.addColorStop(.34, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.28)');
     x.fillStyle = g; x.fillRect(0, 0, W, H);
     x.fillStyle = 'rgba(255,255,255,.014)';
     for (let y = 0; y < H; y += 3) x.fillRect(0, y, W, 1);          /* the weave, barely there */
@@ -5398,6 +5504,16 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
     x.font = '500 10px Onest';
     x.fillStyle = '#e0231c'; spaced(x, btn.querySelector('.tc-ban-top b').textContent, top.x, top.y + 10, 2.4);
     x.fillStyle = '#78837c'; spaced(x, btn.querySelector('.tc-ban-top span').textContent.toUpperCase(), top.x + top.w, top.y + 10, 2.4, 'right');
+    /* the name, under the number */
+    const nEl = btn.querySelector('.tc-ban-n');
+    if (nEl && nEl.getBoundingClientRect().width) {
+      const n = rel(nEl), nfs = parseFloat(getComputedStyle(nEl).fontSize);
+      x.font = '400 ' + nfs + 'px Onest'; x.fillStyle = '#dfe7e0'; x.textBaseline = 'alphabetic';
+      /* first name over surname on the cloth; one line once the banner is open */
+      let names = nEl.innerHTML.split(/<br\s*\/?>/i).map(t => t.trim());
+      if (btn.classList.contains('open')) names = [names.join(' ')];
+      names.forEach((ln, k) => x.fillText(ln, n.x, n.y + nfs * (0.86 + k * 1.08)));
+    }
     /* the role, set down the cloth the way vertical-rl sets it */
     const vEl = btn.querySelector('.tc-ban-v'), v = rel(vEl), fs = parseFloat(getComputedStyle(vEl).fontSize);
     x.font = '400 ' + fs + 'px Onest'; x.fillStyle = '#dfe7e0';
@@ -5414,11 +5530,13 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
       spaced(x, col, 0, 0, sp); x.restore();
     });
     const seal = rel(btn.querySelector('.tc-ban-seal')), sx = seal.x + seal.w / 2, sy = seal.y + seal.h / 2, sr = seal.w / 2;
+    if (sr > 0) {
     x.fillStyle = warm ? 'rgba(224,35,28,.18)' : 'rgba(224,35,28,.12)';
     x.beginPath(); x.arc(sx, sy, sr + (warm ? 7 : 5), 0, Math.PI * 2); x.fill();
     x.save(); x.shadowColor = warm ? 'rgba(224,35,28,.9)' : 'rgba(224,35,28,.6)'; x.shadowBlur = warm ? 30 : 18;
     x.fillStyle = '#e0231c'; x.beginPath(); x.arc(sx, sy, sr, 0, Math.PI * 2); x.fill(); x.restore();
-    if (warm) {
+    }
+    if (warm && btn.querySelector('.tc-ban-d').getBoundingClientRect().width) {
       const dEl = btn.querySelector('.tc-ban-d'), d = rel(dEl);
       x.font = '300 13px Onest'; x.fillStyle = '#aab4ad'; x.textBaseline = 'alphabetic';
       let y = d.y - 10 + 15, ln = '';
@@ -5431,38 +5549,53 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
     return c;
   }
 
-  function build() {
-    sheets.forEach(sh => { scene.remove(sh.mesh); sh.mesh.geometry.dispose(); sh.mat.dispose(); sh.tex.forEach(tx => tx.dispose()); });
-    sheets = [];
+  let cw = 0, ch = 0, hw = 0, hh = 0;
+  const aniso = renderer.capabilities.getMaxAnisotropy();
+  function frameCanvas() {
     const hr = host.getBoundingClientRect();
-    const cw = hr.width + PAD.x * 2, ch = hr.height + PAD.top + PAD.bottom;
+    if (hr.width === hw && hr.height === hh) return hr;
+    hw = hr.width; hh = hr.height;
+    cw = hw + PAD.x * 2; ch = hh + PAD.top + PAD.bottom;
     Object.assign(canvas.style, { left: -PAD.x + 'px', top: -PAD.top + 'px', width: cw + 'px', height: ch + 'px' });
     renderer.setSize(cw, ch, false);
     camera.aspect = cw / ch;
     const dist = (ch / 2) / Math.tan(15 * Math.PI / 180);
     camera.position.set(0, 0, dist); camera.near = dist / 20; camera.far = dist * 20;
     camera.updateProjectionMatrix();
-    const aniso = renderer.capabilities.getMaxAnisotropy();
+    return hr;
+  }
+  function texture(cv, sharp) {
+    const tx = new T.CanvasTexture(cv);
+    if (sharp) tx.anisotropy = aniso; else { tx.generateMipmaps = false; tx.minFilter = T.LinearFilter; }
+    return tx;
+  }
+  /* print the banner at its current size; mid-move a lighter print, and the
+     warm side only when the hover is showing */
+  function reprint(sh, sharp) {
+    const btn = bans[sh.i], S = sharp ? DPR : Math.min(DPR, 1.25);
+    const cold = texture(paint(btn, false, S), sharp);
+    const warm = sharp || sh.hover > .01 || sh.want ? texture(paint(btn, true, S), sharp) : cold;
+    new Set(sh.tex).forEach(tx => tx.dispose());
+    sh.tex = [cold, warm]; sh.mat.uniforms.map.value = cold; sh.mat.uniforms.map2.value = warm;
+  }
+  /* the sheet keeps its own weave and only stretches to the banner's box;
+     its depth follows the shorter side, so a banner that widens billows no
+     deeper and one that slims swings no further */
+  function place(sh, hr) {
+    const r = sh.r = bans[sh.i].getBoundingClientRect(), kx = r.width / BWU, ky = r.height / sh.BHU;
+    sh.mesh.scale.set(kx, ky, Math.min(kx, ky));
+    sh.mesh.position.set(r.left - hr.left + r.width / 2 + PAD.x - cw / 2, -(r.top - hr.top + r.height / 2 + PAD.top - ch / 2), 0);
+  }
+  function build() {
+    sheets.forEach(sh => { scene.remove(sh.mesh); sh.geo.dispose(); sh.mat.dispose(); new Set(sh.tex).forEach(tx => tx.dispose()); });
+    sheets = []; hw = hh = 0;
+    const hr = frameCanvas();
     bans.forEach((btn, i) => {
-      const r = btn.getBoundingClientRect();
-      const k = r.width / BWU, BHU = r.height / k;
+      const r = btn.getBoundingClientRect(), BHU = r.height / (r.width / BWU);
       const geo = new T.PlaneGeometry(BWU, BHU, GX, GY);
-      const tex = [paint(btn, false), paint(btn, true)].map(cv => {
-        const tx = new T.CanvasTexture(cv); tx.encoding = T.sRGBEncoding; tx.anisotropy = aniso; return tx;
-      });
-      const uMix = { value: 0 };
-      /* the print glows a little on its own, so the type keeps the page's bone
-         white where the dimmer cloth around it stays in shadow */
-      const mat = new T.MeshStandardMaterial({ map: tex[0], alphaTest: .5, side: T.DoubleSide, roughness: .9, metalness: 0,
-        emissive: 0x4a4a4a, emissiveMap: tex[0] });
-      mat.onBeforeCompile = sh => {
-        sh.uniforms.map2 = { value: tex[1] }; sh.uniforms.uMix = uMix;
-        sh.fragmentShader = 'uniform sampler2D map2;\nuniform float uMix;\n' + sh.fragmentShader.replace('#include <map_fragment>',
-          '#ifdef USE_MAP\n  vec4 sampledDiffuseColor = mix(texture2D(map, vUv), texture2D(map2, vUv), uMix);\n  diffuseColor *= sampledDiffuseColor;\n#endif');
-      };
+      const mat = new T.ShaderMaterial({ vertexShader: VERT, fragmentShader: FRAG, side: T.DoubleSide,
+        uniforms: { map: { value: null }, map2: { value: null }, uMix: { value: 0 }, uRest: { value: new T.Vector3(0, 0, 1) } } });
       const mesh = new T.Mesh(geo, mat);
-      mesh.scale.setScalar(k);
-      mesh.position.set(r.left - hr.left + r.width / 2 + PAD.x - cw / 2, -(r.top - hr.top + r.height / 2 + PAD.top - ch / 2), 0);
       scene.add(mesh);
       const pos = geo.attributes.position, N = (GX + 1) * (GY + 1);
       const cur = new Float32Array(N * 3), prev = new Float32Array(N * 3), rest = new Float32Array(N * 3);
@@ -5471,7 +5604,10 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
         cur[n * 3 + 1] = prev[n * 3 + 1] = rest[n * 3 + 1] = pos.getY(n);
       }
       const rh = BWU / GX, rv = BHU / GY;
-      sheets.push({ i, mesh, mat, tex, uMix, pos, geo, N, cur, prev, rest, rh, rv, rd: Math.sqrt(rh * rh + rv * rv), hover: 0, want: 0 });
+      const sh = { i, mesh, mat, tex: [], uMix: mat.uniforms.uMix, pos, geo, N, cur, prev, rest, rh, rv, rd: Math.sqrt(rh * rh + rv * rv), BHU,
+        hover: 0, want: 0, held: btn.classList.contains('open') };
+      reprint(sh, true); place(sh, hr);
+      sheets.push(sh);
     });
     for (let s = 0; s < 180; s++) sheets.forEach(sh => step(sh, s * DT));
     sheets.forEach(commit);
@@ -5479,12 +5615,12 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
 
   const id = (ix, iy) => ix + iy * (GX + 1);
   function wind(sh, ix, iy, tt) {
-    const cx = ix / GX, cy = iy / GY, ph = sh.i * 2.1, gain = DRAFT * (1 + .7 * sh.hover);
+    const cx = ix / GX, cy = iy / GY, ph = sh.i * 2.1, gain = DRAFT * (1 + .7 * sh.hover) * (sh.held ? .05 : 1);
     const gust = 0.40 + 0.28 * Math.sin(tt * 0.37 + ph * 0.6) + 0.15 * Math.sin(tt * 0.93 + ph);
     const travel = tt * 1.2 - cy * 2.2 + ph;
     const amp = 1.5 * cy * gain;
     const fz = (Math.sin(travel) + 0.35 * Math.sin(travel * 1.8 + cx * 3.4)) * amp * gust;
-    const fx = Math.sin(tt * 0.44 + ph) * 0.20 * cy * gain;
+    const fx = sh.held ? 0 : Math.sin(tt * 0.44 + ph) * 0.20 * cy * gain;   /* opened, it keeps under its text */
     return [fx, -0.18 * cy, fz];
   }
   function solve(sh, a, b, rl) {
@@ -5498,12 +5634,12 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
     else if (!pa && pb) { c[a * 3] += dx * 2; c[a * 3 + 1] += dy * 2; c[a * 3 + 2] += dz * 2; }
   }
   function step(sh, tt) {
-    const { cur, prev } = sh;
+    const { cur, prev } = sh, damp = sh.held ? .95 : DAMP;   /* opened, it settles fast and stays calm */
     for (let iy = 1; iy <= GY; iy++) for (let ix = 0; ix <= GX; ix++) {
       const n = id(ix, iy), f = wind(sh, ix, iy, tt);
       for (let k = 0; k < 3; k++) {
         const j = n * 3 + k, a = k === 1 ? f[1] + GRAV : f[k];
-        const v = (cur[j] - prev[j]) * DAMP;
+        const v = (cur[j] - prev[j]) * damp;
         prev[j] = cur[j]; cur[j] = cur[j] + v + a * DT * DT;
       }
     }
@@ -5515,22 +5651,41 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
       }
     }
     for (let n = 0; n <= GX * 3 + 2; n++) { cur[n] = sh.rest[n]; prev[n] = sh.rest[n]; }
+    /* opened, the cloth keeps its sides square under the text and only ripples in depth */
+    if (sh.held) for (let n = 0; n < sh.N * 3; n += 3) { cur[n] = prev[n] = sh.rest[n]; }
   }
   function commit(sh) {
     for (let n = 0; n < sh.N; n++) sh.pos.setXYZ(n, sh.cur[n * 3], sh.cur[n * 3 + 1], sh.cur[n * 3 + 2]);
     sh.pos.needsUpdate = true; sh.geo.computeVertexNormals();
+    const nm = sh.geo.attributes.normal, s = sh.mesh.scale; let ax = 0, ay = 0, az = 0;
+    for (let n = 0; n < sh.N; n++) { ax += nm.getX(n); ay += nm.getY(n); az += nm.getZ(n); }
+    sh.mat.uniforms.uRest.value.set(ax / s.x, ay / s.y, az / s.z).normalize();
   }
 
   bans.forEach((btn, i) => {
-    const on = v => () => { if (sheets[i]) sheets[i].want = v; };
+    const on = v => () => { if (sheets[i]) sheets[i].want = v && !btn.classList.contains('open') ? 1 : 0; };
     btn.addEventListener('mouseenter', on(1)); btn.addEventListener('mouseleave', on(0));
-    btn.addEventListener('focus', on(1)); btn.addEventListener('blur', on(0));
+    btn.addEventListener('focusin', on(1)); btn.addEventListener('focusout', on(0));
   });
 
-  let raf = 0, seen = false;
+  let raf = 0, seen = false, moving = false, moveUntil = 0;
   function frame() {
     raf = 0;
     if (!seen || document.hidden) return;
+    /* the banners are changing width: the cloth goes with them, reprinted
+       each frame, and gets its sharp print once they settle */
+    if (moving) {
+      const hr = frameCanvas(), now = performance.now();
+      /* the move starts at this frame's style pass, not at the click */
+      if (!moveUntil) moveUntil = now + parseFloat(getComputedStyle(host).transitionDuration) * 1000 + 80;
+      let still = now > moveUntil;
+      sheets.forEach(sh => {
+        const r = bans[sh.i].getBoundingClientRect();
+        if (Math.abs(r.width - sh.r.width) > .5 || Math.abs(r.height - sh.r.height) > .5) { still = false; reprint(sh, false); }
+        place(sh, hr);
+      });
+      if (still) { sheets.forEach(sh => reprint(sh, true)); moving = false; }
+    }
     t += DT;
     sheets.forEach(sh => {
       sh.hover += (sh.want - sh.hover) * .07;
@@ -5545,6 +5700,10 @@ $$('.tc-ban[data-lead]').forEach(el => el.addEventListener('click', () => open('
   document.addEventListener('visibilitychange', go);
   let rt = 0;
   addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { build(); renderer.render(scene, camera); }, 160); });
+  clothRelayout = () => {
+    sheets.forEach(sh => { sh.held = bans[sh.i].classList.contains('open'); if (sh.held) sh.want = 0; });
+    moving = true; moveUntil = 0; go();
+  };
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); host.classList.remove('is-cloth'); canvas.remove(); seen = false; });
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => {
     build(); renderer.render(scene, camera); go();
